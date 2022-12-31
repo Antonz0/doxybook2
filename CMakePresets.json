@@ -1,0 +1,30 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "Windows",
+            "generator": "Visual Studio 17 2022",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Windows-Debug",
+            "configurePreset": "Windows",
+            "configuration": "Debug"
+        },
+        {
+            "name": "Windows-MinSizeRel",
+            "configurePreset": "Windows",
+            "configuration": "MinSizeRel"
+        },
+        {
+            "name": "Windows-Release",
+            "configurePreset": "Windows",
+            "configuration": "Release"
+        }
+    ]
+}
