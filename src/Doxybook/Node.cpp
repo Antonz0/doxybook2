@@ -1,15 +1,17 @@
-#include "ExceptionUtils.hpp"
 #include <Doxybook/Exception.hpp>
 #include <Doxybook/Node.hpp>
 #include <Doxybook/TextPrinter.hpp>
 #include <Doxybook/Utils.hpp>
 #include <Doxybook/XmlTextParser.hpp>
+
+#include "ExceptionUtils.hpp"
+
 #include <cassert>
 #include <fmt/format.h>
 #include <functional>
 #include <iostream>
-#include <unordered_map>
 #include <spdlog/spdlog.h>
+#include <unordered_map>
 
 class Doxybook2::Node::Temp {
 public:
@@ -63,8 +65,7 @@ Doxybook2::Node::parse(NodeCacheMap& cache, const std::string& inputDir, const N
     ptr->name = assertChild(compounddef, "compoundname").getText();
     ptr->language = Utils::normalizeLanguage(compounddef.getAttr("language", ""));
     auto kind = toEnumKind(compounddef.getAttr("kind"));
-    ptr->kind = (ptr->language == "java" && kind == Kind::ENUM) ? Kind::JAVAENUM
-                                                                : kind;
+    ptr->kind = (ptr->language == "java" && kind == Kind::ENUM) ? Kind::JAVAENUM : kind;
     ptr->empty = false;
     cache.insert(std::make_pair(ptr->refid, ptr));
 
@@ -89,8 +90,7 @@ Doxybook2::Node::parse(NodeCacheMap& cache, const std::string& inputDir, const N
             // Doxygen outputs Java enum values as variables with empty <type>
             auto typeElement = memberdef.firstChildElement("type");
             bool hasTypeDefined = typeElement ? typeElement.hasText() : false;
-            if (ptr->kind == Kind::JAVAENUM && child->kind == Kind::VARIABLE && !hasTypeDefined)
-            {
+            if (ptr->kind == Kind::JAVAENUM && child->kind == Kind::VARIABLE && !hasTypeDefined) {
                 child->kind = Kind::JAVAENUMCONSTANT;
                 child->type = Type::JAVAENUMCONSTANTS;
             }
@@ -251,22 +251,11 @@ void Doxybook2::Node::parseInheritanceInfo(const Xml::Element& element) {
     });
 }
 
-void Doxybook2::Node::finalize(const Config& config,
-    const TextPrinter& plainPrinter,
-    const TextPrinter& markdownPrinter,
-    const NodeCacheMap& cache) {
-    // Sort children
-    if (config.sort) {
-#ifdef _MSC_VER
-        children.sort([](const NodePtr& a, const NodePtr& b) { return a->getName() < b->getName(); });
-#else
-        children.sort([](const NodePtr& a, const NodePtr& b) { return a->getName() > b->getName(); });
-#endif
-    }
-
+void Doxybook2::Node::makeUrl(const Config& config) {
     static const auto anchorMaker = [](const Config& config, const Node& node) {
         if (!node.isStructured() && node.kind != Kind::MODULE) {
-            return "#" + Utils::toLower(toStr(node.kind)) + "-" + Utils::safeAnchorId(node.name, config.replaceUnderscoresInAnchors);
+            return "#" + Utils::toLower(toStr(node.kind)) + "-" +
+                   Utils::safeAnchorId(node.name, config.replaceUnderscoresInAnchors);
         } else {
             return std::string("");
         }
@@ -319,6 +308,25 @@ void Doxybook2::Node::finalize(const Config& config,
         }
     };
 
+    anchor = anchorMaker(config, *this);
+    url = urlMaker(config, *this);
+    if (config.linkLowercase)
+        url = Utils::toLower(url);
+}
+
+void Doxybook2::Node::finalize(const Config& config,
+    const TextPrinter& plainPrinter,
+    const TextPrinter& markdownPrinter,
+    const NodeCacheMap& cache) {
+    // Sort children
+    if (config.sort) {
+#ifdef _MSC_VER
+        children.sort([](const NodePtr& a, const NodePtr& b) { return a->getName() < b->getName(); });
+#else
+        children.sort([](const NodePtr& a, const NodePtr& b) { return a->getName() > b->getName(); });
+#endif
+    }
+
     // Fix group linking
     if (!group && refid.find("group__") == 0) {
         const auto it = cache.find(Utils::stripAnchor(refid));
@@ -332,10 +340,7 @@ void Doxybook2::Node::finalize(const Config& config,
         summary = plainPrinter.print(temp->brief);
         temp.reset();
 
-        anchor = anchorMaker(config, *this);
-        url = urlMaker(config, *this);
-        if (config.linkLowercase)
-            url = Utils::toLower(url);
+        makeUrl(config);
 
         const auto findOrNull = [&](const std::string& refid) -> const Node* {
             const auto it = cache.find(refid);
