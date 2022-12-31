@@ -1,15 +1,16 @@
 #include <Doxybook/DefaultTemplates.hpp>
 #include <Doxybook/Doxygen.hpp>
 #include <Doxybook/Generator.hpp>
-#include <spdlog/spdlog.h>
 #include <Doxybook/Path.hpp>
 #include <Doxybook/TextMarkdownPrinter.hpp>
 #include <Doxybook/TextPlainPrinter.hpp>
 #include <Doxybook/Utils.hpp>
-#include <cxxopts.hpp>
 #include <cassert>
+#include <cxxopts.hpp>
 #include <iostream>
+#include <spdlog/spdlog.h>
 #include <string>
+
 
 #define xstr(a) str(a)
 #define str(a) #a
@@ -19,15 +20,11 @@ static const std::string version = xstr(VERSION);
 #else
 static const std::string version = "unknown";
 #endif
- 
+
 using namespace Doxybook2;
 
-static const Generator::Filter INDEX_CLASS_FILTER = {Kind::NAMESPACE,
-    Kind::CLASS,
-    Kind::INTERFACE,
-    Kind::STRUCT,
-    Kind::UNION,
-    Kind::JAVAENUM};
+static const Generator::Filter INDEX_CLASS_FILTER =
+    {Kind::NAMESPACE, Kind::CLASS, Kind::INTERFACE, Kind::STRUCT, Kind::UNION, Kind::JAVAENUM};
 
 static const Generator::Filter INDEX_CLASS_FILTER_SKIP = {Kind::NAMESPACE};
 
@@ -50,28 +47,28 @@ int main(int argc, char* argv[]) {
 
     cxxopts::Options options("Doxybook", "Doxygen XML to Markdown (or JSON)");
 
-    options.add_options()
-    ("h, help", "Shows this help message.")
-    ("v, version", "Shows the version.")
-    ("q, quiet", "Run in quiet mode, no stdout, display only errors and warnings to stderr.", cxxopts::value<bool>()->default_value("false"))
-    ("i, input", "Path to the generated Doxygen XML folder. Must contain index.xml!", cxxopts::value<std::string>())
-    ("o, output", "Path to the target folder where to generate markdown files.", cxxopts::value<std::string>())
-    ("j, json", "Generate JSON only, no markdown, into the output path. This will also generate index.json.")
-    ("c, config", "Optional path to a config json file.", cxxopts::value<std::string>())
-    ("config-data", "Optional json data to override config.", cxxopts::value<std::string>())
-    ("t, templates", "Optional path to a folder with templates.", cxxopts::value<std::string>())
-    ("generate-config", "Generate config file given a path to the destination json file", cxxopts::value<std::string>())
-    ("generate-templates", "Generate template files given a path to a target folder.", cxxopts::value<std::string>())
-    ("d, debug-templates", "Debug templates. This will create JSON for each generated template.")
-    ("summary-input", "Path to the summary input file. This file must contain \"{{doxygen}}\" string.", cxxopts::value<std::string>())
-    ("summary-output", "Where to generate summary file. This file will be created. Not a directory!", cxxopts::value<std::string>())
-    ("example", "Example usage:\n"
-                                   "    doxybook2 --generate-config doxybook.json\n"
-                                   "    doxybook2 -i ./doxygen/xml -o ./docs/content -c doxybook.json\n"
-                                   "\n")
-    ;
-
-
+    options.add_options()("h, help", "Shows this help message.")("v, version", "Shows the version.")("q, quiet",
+        "Run in quiet mode, no stdout, display only errors and warnings to stderr.",
+        cxxopts::value<bool>()->default_value("false"))(
+        "i, input", "Path to the generated Doxygen XML folder. Must contain index.xml!", cxxopts::value<std::string>())(
+        "o, output", "Path to the target folder where to generate markdown files.", cxxopts::value<std::string>())(
+        "j, json", "Generate JSON only, no markdown, into the output path. This will also generate index.json.")(
+        "c, config", "Optional path to a config json file.", cxxopts::value<std::string>())(
+        "config-data", "Optional json data to override config.", cxxopts::value<std::string>())(
+        "t, templates", "Optional path to a folder with templates.", cxxopts::value<std::string>())("generate-config",
+        "Generate config file given a path to the destination json file",
+        cxxopts::value<std::string>())("generate-templates",
+        "Generate template files given a path to a target folder.",
+        cxxopts::value<std::string>())(
+        "d, debug-templates", "Debug templates. This will create JSON for each generated template.")("summary-input",
+        "Path to the summary input file. This file must contain \"{{doxygen}}\" string.",
+        cxxopts::value<std::string>())("summary-output",
+        "Where to generate summary file. This file will be created. Not a directory!",
+        cxxopts::value<std::string>())("example",
+        "Example usage:\n"
+        "    doxybook2 --generate-config doxybook.json\n"
+        "    doxybook2 -i ./doxygen/xml -o ./docs/content -c doxybook.json\n"
+        "\n");
 
     try {
         Config config;
@@ -198,9 +195,8 @@ int main(int argc, char* argv[]) {
                         sections.push_back({FolderCategory::EXAMPLES, INDEX_EXAMPLES_FILTER, {}});
                     }
 
-                    generator.summary(args["summary-input"].as<std::string>(),
-                        args["summary-output"].as<std::string>(),
-                        sections);
+                    generator.summary(
+                        args["summary-input"].as<std::string>(), args["summary-output"].as<std::string>(), sections);
                 }
 
                 Generator::Filter languageFilder;

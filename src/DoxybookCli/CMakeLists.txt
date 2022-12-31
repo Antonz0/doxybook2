@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.21)
 project(Doxybook2Cli)
 
 # Project source files
@@ -19,6 +19,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "doxybook2")
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src/Doxybook)
 target_compile_definitions(${PROJECT_NAME} PRIVATE VERSION=${VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
+
+if(MSVC)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS)
+endif()
 
 if(DOXYBOOK_STATIC_STDLIB)
   target_link_libraries(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
