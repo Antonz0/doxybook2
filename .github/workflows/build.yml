@@ -1,12 +1,15 @@
 name: build
+
 on:
+  workflow_dispatch:
   push:
     branches:
-      - '*'
+      - '**'
     tags:
-      - '*'
+      - '**'
   pull_request:
     branches:
+      - 'develop'
       - 'master'
 
 jobs:
@@ -20,14 +23,12 @@ jobs:
           - name: 'Windows x64'
             os: windows-latest
             triplet: x64-windows
-            vcpkg_dir: 'C:\vcpkg'
             suffix: 'windows-win64'
             generator: 'Visual Studio 17 2022'
             arch: '-A x64'
           - name: 'Windows x86'
             os: windows-latest
             triplet: x86-windows
-            vcpkg_dir: 'C:\vcpkg'
             suffix: 'windows-win32'
             generator: 'Visual Studio 17 2022'
             arch: '-A Win32'
@@ -35,27 +36,62 @@ jobs:
             os: ubuntu-latest
             triplet: x64-linux
             suffix: 'linux-amd64'
-            vcpkg_dir: '/usr/local/share/vcpkg'
-            generator: 'Unix Makefiles'
+            generator: 'Ninja'
             arch: ''
           - name: 'Mac OSX x64'
             os: macos-latest
             triplet: x64-osx
             suffix: 'osx-amd64'
-            vcpkg_dir: '/usr/local/share/vcpkg'
-            generator: 'Unix Makefiles'
+            generator: 'Ninja'
             arch: ''
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
         with:
           submodules: true
 
-      - name: Configure Vcpkg
+      - name: Setup Vcpkg
         shell: bash
         run: |
-          cd ${{ matrix.vcpkg_dir }}
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            VCPKG_ROOT=C:\\vcpkg
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+            VCPKG_ROOT=/usr/local/share/vcpkg
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            VCPKG_ROOT="$HOME/vcpkg"
+          fi
+          echo "VCPKG_ROOT=${VCPKG_ROOT}" >> ${GITHUB_ENV}
+
+#      - name: Restore Vcpkg Root Cache
+#        id: cache-vcpkg-restore
+#        uses: actions/cache/restore@v4
+#        env:
+#          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+#        with:
+#          path: |
+#            ${{ env.VCPKG_ROOT }}
+#          key: vcpkg-root-${{ matrix.triplet }}-${{ github.run_id }}
+#          restore-keys: |
+#            vcpkg-root-${{ matrix.triplet }}
+
+      - name: Configure Vcpkg
+        shell: bash
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+        run: |
+          if [ "$RUNNER_OS" == "macOS" ]; then
+            brew install vcpkg
+            if [[ -d "${{ env.VCPKG_ROOT }}" ]]; then
+              pushd "${{ env.VCPKG_ROOT }}"
+              git fetch --all
+              git reset --hard
+              popd
+            else
+              git clone https://github.com/microsoft/vcpkg "${{ env.VCPKG_ROOT }}"
+            fi
+          fi
+          pushd "${{ env.VCPKG_ROOT }}"
           git fetch origin
           git reset --hard origin/master
           if [ "${{ matrix.triplet }}" == "x64-windows" ] || [ "${{ matrix.triplet }}" == "x86-windows" ]; then
@@ -63,9 +99,12 @@ jobs:
           else
             ./bootstrap-vcpkg.sh
           fi
+          popd
 
       - name: Configure
         shell: bash
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
         run: |
           mkdir build
           mkdir install
@@ -76,13 +115,9 @@ jobs:
               -DCMAKE_INSTALL_PREFIX=./install \
               -DCMAKE_BUILD_TYPE=MinSizeRel \
               -DDOXYBOOK_TESTS=ON \
-              -DCMAKE_TOOLCHAIN_FILE=${{ matrix.vcpkg_dir }}/scripts/buildsystems/vcpkg.cmake \
+              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
               .
           else
-            if [ "$RUNNER_OS" == "Linux" ]; then
-              export CC=/usr/bin/gcc-9
-              export CXX=/usr/bin/g++-9
-            fi
             cmake \
               -B ./build \
               -G "${{ matrix.generator }}" \
@@ -90,9 +125,19 @@ jobs:
               -DCMAKE_BUILD_TYPE=MinSizeRel \
               -DDOXYBOOK_TESTS=ON \
               -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} \
-              -DCMAKE_TOOLCHAIN_FILE=${{ matrix.vcpkg_dir }}/scripts/buildsystems/vcpkg.cmake \
+              -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake \
               .
           fi
+
+#      - name: Save Vcpkg Root Cache
+#        id: cache-vcpkg-save
+#        uses: actions/cache/save@v4
+#        env:
+#          VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
+#        with:
+#          path: |
+#            ${{ env.VCPKG_ROOT }}
+#          key: vcpkg-root-${{ matrix.triplet }}-${{ github.run_id }}
 
       - name: Compile
         shell: bash
@@ -121,30 +166,30 @@ jobs:
             ls ./install
             7z a -r doxybook2.zip ./install/*
           else
-            cd ./install
+            pushd "./install"
             zip -r ./../doxybook2.zip *
-            cd ..
+            popd
           fi
-          name=doxybook2-${{ matrix.suffix }}-$(git describe --always).zip
-          mv -v ./doxybook2.zip release/${name}
-          echo "::set-output name=name::${name}"
-          echo "::set-output name=path::release/${name}"
+          NAME=doxybook2-${{ matrix.suffix }}-$(git describe --always).zip
+          mv -v ./doxybook2.zip release/${NAME}
+          echo "name=${NAME}" >> $GITHUB_OUTPUT
+          echo "path=release/${NAME}" >> $GITHUB_OUTPUT
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
-          name: Release
-          path: release
+          name: Release-${{ matrix.suffix }}
+          path: ./install
 
       - name: Changelog
         id: create_changelog
         shell: bash
         run: |
-          last_tag=$(git describe --tags --abbrev=0 @^ || true)
-          if [ -z "$last_tag" ]; then
+          LAST_TAG=$(git describe --tags --abbrev=0 @^ || true)
+          if [ -z "$LAST_TAG" ]; then
             git log --oneline --no-merges --format="%C(auto) %h %s" > changelog.txt
           else
-            git log --oneline --no-merges --format="%C(auto) %h %s" ${last_tag}..@ > changelog.txt
+            git log --oneline --no-merges --format="%C(auto) %h %s" ${LAST_TAG}..@ > changelog.txt
           fi
           cat changelog.txt
 
@@ -161,14 +206,14 @@ jobs:
           omitNameDuringUpdate: true
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
-  
+
   pages:
     name: Pages
     needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -179,9 +224,9 @@ jobs:
           mkdir -p ${{ github.workspace }}/public
 
       - name: Download Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 8.x
+          node-version: 23
 
       - name: Download Hugo
         shell: bash
@@ -203,10 +248,10 @@ jobs:
 #        run: |
 #          sudo npm install vuepress vue-template-compiler -g
 
-      - name: Download GitBook CLI
+      - name: Download Honkit CLI
         shell: bash
         run: |
-          sudo npm install gitbook-cli -g
+          sudo npm install honkit flat-cache -g
 
       - name: Download Doxygen
         shell: bash
@@ -216,19 +261,21 @@ jobs:
           sudo cp ./doxygen-1.8.17/bin/doxygen /usr/local/bin/doxygen
           sudo chmod +x /usr/local/bin/doxygen
 
-      - uses: actions/download-artifact@v2
+      - name: Download Doxybook2 artifact
+        uses: actions/download-artifact@v4
         with:
-          name: Release
-          path: /tmp/release
+          name: Release-linux-amd64
+          path: ${{ runner.temp }}/release
 
       - name: Install Doxybook2
         shell: bash
+        env:
+          TMPDIR: ${{ runner.temp }}
         run: |
-          file=$(ls /tmp/release | grep linux)
-          unzip "/tmp/release/$file" -d /tmp/doxybook2
-          sudo cp /tmp/doxybook2/bin/doxybook2 /usr/local/bin/doxybook2
+          sudo cp ${TMPDIR}/release/bin/doxybook2 /usr/local/bin/doxybook2
           sudo chmod +x /usr/local/bin/doxybook2
-          doxybook2 --version
+          /usr/local/bin/doxybook2 --version
+          echo "DOXYBOOK2=/usr/local/bin/doxybook2" >> ${GITHUB_ENV}
 
       - name: Run Doxygen
         shell: bash
@@ -238,8 +285,10 @@ jobs:
 
       - name: MkDocs - ReadTheDocs
         shell: bash
+        env:
+          DOXYBOOK2: ${{ env.DOXYBOOK2 }}
         run: |
-          doxybook2 \
+          ${DOXYBOOK2} \
             --input ./example/doxygen/xml \
             --output ./example/mkdocs-readthedocs/docs \
             --config ./example/mkdocs-readthedocs/.doxybook/config.json
@@ -249,8 +298,10 @@ jobs:
 
       - name: MkDocs - Material
         shell: bash
+        env:
+          DOXYBOOK2: ${{ env.DOXYBOOK2 }}
         run: |
-          doxybook2 \
+          ${DOXYBOOK2} \
             --input ./example/doxygen/xml \
             --output ./example/mkdocs-material/docs \
             --config ./example/mkdocs-material/.doxybook/config.json
@@ -260,8 +311,10 @@ jobs:
 
       - name: MkDocs - Bootswatch
         shell: bash
+        env:
+          DOXYBOOK2: ${{ env.DOXYBOOK2 }}
         run: |
-          doxybook2 \
+          ${DOXYBOOK2} \
             --input ./example/doxygen/xml \
             --output ./example/mkdocs-bootswatch/docs \
             --config ./example/mkdocs-bootswatch/.doxybook/config.json
@@ -271,8 +324,10 @@ jobs:
 
       - name: Hugo - Learn
         shell: bash
+        env:
+          DOXYBOOK2: ${{ env.DOXYBOOK2 }}
         run: |
-          doxybook2 \
+          ${DOXYBOOK2} \
             --input ./example/doxygen/xml \
             --output ./example/hugo-learn/content \
             --config ./example/hugo-learn/.doxybook/config.json \
@@ -283,8 +338,10 @@ jobs:
 
       - name: Hugo - Book
         shell: bash
+        env:
+          DOXYBOOK2: ${{ env.DOXYBOOK2 }}
         run: |
-          doxybook2 \
+          ${DOXYBOOK2} \
             --input ./example/doxygen/xml \
             --output ./example/hugo-book/content \
             --config ./example/hugo-book/.doxybook/config.json \
@@ -296,8 +353,10 @@ jobs:
 # Disabled due to VuePress not supporting Vue 3.x
 #      - name: VuePress - Default
 #        shell: bash
+#        env:
+#          DOXYBOOK2: ${{ env.DOXYBOOK2 }}
 #        run: |
-#          doxybook2 \
+#          ${DOXYBOOK2} \
 #            --input ./example/doxygen/xml \
 #            --output ./example/vuepress \
 #            --config ./example/vuepress/.doxybook/config.json
@@ -305,18 +364,22 @@ jobs:
 #          sudo vuepress build
 #          cp -r ./.vuepress/dist ${{ github.workspace }}/public/vuepress
 
-      - name: GitBook - Default
+# TODO: Usage of sudo to run `honkit` is currently a temporary workaround, needed until honkit
+# updates it's flat-cache to more newer version: https://github.com/honkit/honkit/issues/452.
+      - name: Honkit - Default
         shell: bash
+        env:
+          DOXYBOOK2: ${{ env.DOXYBOOK2 }}
         run: |
-          doxybook2 \
+          ${DOXYBOOK2} \
             --input ./example/doxygen/xml \
-            --output ./example/gitbook \
-            --config ./example/gitbook/.doxybook/config.json \
-            --summary-input ./example/gitbook/SUMMARY.md.tmpl \
-            --summary-output ./example/gitbook/SUMMARY.md
-          cd ./example/gitbook
-          gitbook build
-          cp -r ./_book ${{ github.workspace }}/public/gitbook
+            --output ./example/honkit \
+            --config ./example/honkit/.doxybook/config.json \
+            --summary-input ./example/honkit/SUMMARY.md.tmpl \
+            --summary-output ./example/honkit/SUMMARY.md
+          cd ./example/honkit
+          sudo honkit build
+          sudo cp -r ./_book ${{ github.workspace }}/public/honkit
 
       - name: Additional files
         shell: bash
@@ -327,7 +390,7 @@ jobs:
 
       - name: Deploy
         if: startsWith(github.ref, 'refs/heads/master')
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ${{ github.workspace }}/public

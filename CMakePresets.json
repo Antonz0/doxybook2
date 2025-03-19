@@ -6,6 +6,8 @@
             "generator": "Visual Studio 17 2022",
             "binaryDir": "${sourceDir}/build",
             "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "./install",
+                "DOXYBOOK_TESTS": "ON",
                 "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             }
         }
