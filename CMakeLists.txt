@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.10)
-set(CMAKE_MODULE_PATH 
+cmake_minimum_required(VERSION 3.21)
+set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   "${CMAKE_CURRENT_LIST_DIR}/modules"
 )
@@ -7,7 +7,6 @@ set(CMAKE_MODULE_PATH
 project(Doxybook2)
 
 if(USE_CPM)
-  
   include(cmake/CPM.cmake)
 
   CPMAddPackage(
@@ -25,12 +24,13 @@ if(USE_CPM)
     NAME nlohmann_json
     GITHUB_REPOSITORY nlohmann/json
     VERSION 3.9.1
-    OPTIONS 
+    OPTIONS
       "JSON_BuildTests OFF"
   )
   CPMAddPackage("gh:gabime/spdlog#v1.9.1")
   CPMAddPackage("gh:jarro2783/cxxopts#v2.2.1")
-  if (MSVC)
+
+  if(MSVC)
     CPMAddPackage("gh:tronkko/dirent#1.23.2")
   endif()
 endif()
@@ -48,6 +48,7 @@ set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithD
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/Doxybook)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/DoxybookCli)
+
 if(DOXYBOOK_TESTS)
   add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tests/DoxybookTests)
 endif()
