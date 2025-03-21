@@ -1,19 +1,10 @@
 # Doxybook2
 
-## Attention! Project has been archived!
+[![build](https://github.com/Antonz0/doxybook2/actions/workflows/build.yml/badge.svg?branch=develop)](actions) [![downloads](https://img.shields.io/github/downloads/Antonz0/doxybook2/total)](releases) [![release](https://img.shields.io/github/v/release/Antonz0/doxybook2)](releases)
 
-I have decided to archive this repository. This has been a great experience and it makes me happy that many of you have found this tool useful. I wish that I did a better job with the quality of the code, and mainly with maintaining it. This project was started as a toy and I never expected it to become popular. **I am archiving this repository because I want to focus on other things in my life, and my free time has been occupied by other events.** Moreover, I have started to have a burnout programming. If anyone wishes to continue working on this project, please fork it and feel free to contact me (see my GitHub bio for contact details).
+Doxygen XML to Markdown (or JSON) converter. Generate beautiful C++ documentation by converting Doxygen XML output into markdown pages via [MkDocs](https://www.mkdocs.org/), [Hugo](https://gohugo.io/), [VuePress](https://vuepress.vuejs.org/), [Honkit](https://github.com/honkit/honkit) (a [GitBook](https://github.com/GitbookIO/gitbook) Fork), [Docsify](https://docsify.js.org/#/), or your custom generator. Also comes with an optional templating mechanism and extensive configuration file.
 
-**Please also consider using the following alternatives:**
-* [m.css](https://mcss.mosra.cz/documentation/doxygen/) - A modern, mobile-friendly drop-in replacement for the stock Doxygen HTML output
-* [standardese](https://github.com/standardese/standardese) - Standardese aims to be a nextgen Doxygen.
-* [HDoc](https://hdoc.io/) - The modern documentation tool for C++
-
-### Farewell and **thank you to all contributors for fixing bugs and contributing with new functionality!**
-
-[![build](https://github.com/matusnovak/doxybook2/workflows/build/badge.svg)](https://github.com/matusnovak/doxybook2/actions) [![downloads](https://img.shields.io/github/downloads/matusnovak/doxybook2/total)](https://github.com/matusnovak/doxybook2/releases) [![release](https://img.shields.io/github/v/release/matusnovak/doxybook2)](https://github.com/matusnovak/doxybook2/releases)
-
-Doxygen XML to Markdown (or JSON) converter. Generate beautiful C++ documentation by converting Doxygen XML output into markdown pages via [MkDocs](https://www.mkdocs.org/), [Hugo](https://gohugo.io/), [VuePress](https://vuepress.vuejs.org/), [GitBook](https://github.com/GitbookIO/gitbook), [Docsify](https://docsify.js.org/#/), or your custom generator. Also comes with an optional templating mechanism and extensive configuration file.
+**Note**: support for a legacy [GitBook](https://github.com/GitbookIO/gitbook) was dropped and replaced with a [Honkit](https://github.com/honkit/honkit) clone now, and currently project doesn't provide a separate example for it. There are plans to restore it later, when modern GitBook will be publicly releases.
 
 ![Screenshot - Hugo Learn](screenshots/screenshot_hugo_learn.jpg)
 
@@ -21,31 +12,44 @@ _[Screenshot taken from here](https://matusnovak.github.io/doxybook2/hugo-learn/
 
 # Table of contents
 
-* [Description](#Description)
-* [Examples](#Examples)
-  * [Creating examples locally](#Creating-examples-locally)
-* [Requirements](#Requirements)
-* [Install](#Install)
-* [Install from source](#Install-from-source)
-* [Usage](#Usage)
-  * [Hello World](#Hello-world)
-  * [Command line arguments](#Command-line-arguments)
-  * [GitBook specific usage](#GitBook-specific-usage)
-  * [Generating JSON only](#Generating-JSON-only)
-* [Config](#Config)
-  * [Generate default config](#Generate-default-config)
-  * [Config usage](#Config-usage)
-  * [Config examples](#Config-examples)
-  * [Config values](#Config-values)
-* [Templates](#Templates)
-  * [Generate default templates](#Generate-default-templates)
-  * [Using template](#Using-template)
-  * [Debugging templates](#Debugging-templates)
-* [Use as a library](#As-a-library)
-* [Contributing](#Contributing)
-* [Issues](#Issues)
-* [Known Problems](#Known-Problems)
-* [License](#License)
+- [Doxybook2](#doxybook2)
+- [Table of contents](#table-of-contents)
+  - [Description](#description)
+    - [Hugo with Book theme (Link)](#hugo-with-book-theme-link)
+    - [MkDocs with ReadTheDocs theme (Link)](#mkdocs-with-readthedocs-theme-link)
+    - [MkDocs with Material theme (Link)](#mkdocs-with-material-theme-link)
+    - [MkDocs with Bootswatch theme (Link )](#mkdocs-with-bootswatch-theme-link-)
+    - [VuePress with default theme (Link )](#vuepress-with-default-theme-link-)
+    - [GitBook with default theme (Link)](#gitbook-with-default-theme-link)
+    - [Docsify with default theme (no link)](#docsify-with-default-theme-no-link)
+  - [Examples](#examples)
+    - [Creating examples locally](#creating-examples-locally)
+  - [Requirements](#requirements)
+  - [Install](#install)
+  - [Install from source](#install-from-source)
+  - [Usage](#usage)
+    - [Hello World](#hello-world)
+    - [Command line arguments](#command-line-arguments)
+    - [GitBook/Honkit specific usage](#gitbookhonkit-specific-usage)
+    - [Generating JSON only](#generating-json-only)
+  - [Config](#config)
+    - [Generate default config](#generate-default-config)
+    - [Config usage](#config-usage)
+    - [Config examples](#config-examples)
+    - [Config values](#config-values)
+  - [Latex formulas](#latex-formulas)
+  - [Templates](#templates)
+    - [Generate default templates](#generate-default-templates)
+    - [Using templates](#using-templates)
+    - [Custom templates detailed example](#custom-templates-detailed-example)
+    - [Changes to templates since 1.1.0](#changes-to-templates-since-110)
+    - [Debugging templates](#debugging-templates)
+  - [Use as a library](#use-as-a-library)
+  - [Contributing](#contributing)
+  - [Issues](#issues)
+  - [Known Problems](#known-problems)
+  - [Comparable alternatives](#comparable-alternatives)
+  - [License](#license)
 
 ## Description
 
@@ -88,19 +92,19 @@ This project is not perfect and I will never claim it will be. It does its job a
 
 ## Examples
 
-| Demo | Generator | Theme | Config |
-| ---- | --------- | ----- | ------ |
-| [Link](https://matusnovak.github.io/doxybook2/hugo-learn/classes/classengine_1_1audio_1_1audiobuffer/) | [Hugo](https://gohugo.io/) | [Learn](https://themes.gohugo.io/hugo-theme-learn/) | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/hugo-learn/.doxybook) |
-| [Link](https://matusnovak.github.io/doxybook2/hugo-book/classes/classengine_1_1audio_1_1audiobuffer/) | [Hugo](https://gohugo.io/) | [Book](https://themes.gohugo.io/hugo-book/) | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/hugo-book/.doxybook) |
-| [Link](https://matusnovak.github.io/doxybook2/mkdocs-readthedocs/Classes/classEngine_1_1Audio_1_1AudioBuffer/) | [MkDocs](https://www.mkdocs.org/) | [ReadTheDocs](https://mkdocs.readthedocs.io/en/stable/) | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/mkdocs-readthedocs/.doxybook) |
-| [Link](https://matusnovak.github.io/doxybook2/mkdocs-material/Classes/classEngine_1_1Audio_1_1AudioBuffer/) | [MkDocs](https://www.mkdocs.org/) | [Material](https://squidfunk.github.io/mkdocs-material/) | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/mkdocs-material/.doxybook) |
-| [Link](https://matusnovak.github.io/doxybook2/mkdocs-bootswatch/Classes/classEngine_1_1Audio_1_1AudioBuffer/) | [MkDocs](https://www.mkdocs.org/) | [Bootswatch](http://mkdocs.github.io/mkdocs-bootswatch/) | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/mkdocs-bootswatch/.doxybook) |
-| [Link](https://matusnovak.github.io/doxybook2/vuepress/Classes/classEngine_1_1Audio_1_1AudioBuffer.html) | [VuePress](https://vuepress.vuejs.org/) | Default | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/vuepress/.doxybook) |
-| [Link](https://matusnovak.github.io/doxybook2/gitbook/Classes/classEngine_1_1Audio_1_1AudioBuffer.html) | [GitBook](https://github.com/GitbookIO/gitbook) | Default | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/vuepress/.doxybook) |
-| N/A | [Docsify](https://docsify.js.org/#/) | Default | [.doxybook](https://github.com/matusnovak/doxybook2/tree/master/example/docsify/.doxybook) |
-| [Link](https://matusnovak.github.io/doxybook2/original/classEngine_1_1Audio_1_1AudioBuffer.html) | Original Doxygen | N/A | N/A |
+| Demo                                                                                                           | Generator                                       | Theme                                                    | Config                                                        |
+| -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------- |
+| [Link](https://matusnovak.github.io/doxybook2/hugo-learn/classes/classengine_1_1audio_1_1audiobuffer/)         | [Hugo](https://gohugo.io/)                      | [Learn](https://themes.gohugo.io/hugo-theme-learn/)      | [.doxybook](tree/master/example/hugo-learn/.doxybook)         |
+| [Link](https://matusnovak.github.io/doxybook2/hugo-book/classes/classengine_1_1audio_1_1audiobuffer/)          | [Hugo](https://gohugo.io/)                      | [Book](https://themes.gohugo.io/hugo-book/)              | [.doxybook](tree/master/example/hugo-book/.doxybook)          |
+| [Link](https://matusnovak.github.io/doxybook2/mkdocs-readthedocs/Classes/classEngine_1_1Audio_1_1AudioBuffer/) | [MkDocs](https://www.mkdocs.org/)               | [ReadTheDocs](https://mkdocs.readthedocs.io/en/stable/)  | [.doxybook](tree/master/example/mkdocs-readthedocs/.doxybook) |
+| [Link](https://matusnovak.github.io/doxybook2/mkdocs-material/Classes/classEngine_1_1Audio_1_1AudioBuffer/)    | [MkDocs](https://www.mkdocs.org/)               | [Material](https://squidfunk.github.io/mkdocs-material/) | [.doxybook](tree/master/example/mkdocs-material/.doxybook)    |
+| [Link](https://matusnovak.github.io/doxybook2/mkdocs-bootswatch/Classes/classEngine_1_1Audio_1_1AudioBuffer/)  | [MkDocs](https://www.mkdocs.org/)               | [Bootswatch](http://mkdocs.github.io/mkdocs-bootswatch/) | [.doxybook](tree/master/example/mkdocs-bootswatch/.doxybook)  |
+| [Link](https://matusnovak.github.io/doxybook2/vuepress/Classes/classEngine_1_1Audio_1_1AudioBuffer.html)       | [VuePress](https://vuepress.vuejs.org/)         | Default                                                  | [.doxybook](tree/master/example/vuepress/.doxybook)           |
+| [Link](https://matusnovak.github.io/doxybook2/gitbook/Classes/classEngine_1_1Audio_1_1AudioBuffer.html)        | [GitBook](https://github.com/GitbookIO/gitbook) | Default                                                  | [.doxybook](tree/master/example/vuepress/.doxybook)           |
+| N/A                                                                                                            | [Docsify](https://docsify.js.org/#/)            | Default                                                  | [.doxybook](tree/master/example/docsify/.doxybook)            |
+| [Link](https://matusnovak.github.io/doxybook2/original/classEngine_1_1Audio_1_1AudioBuffer.html)               | Original Doxygen                                | N/A                                                      | N/A                                                           |
 
-Source markdown files for these examples above: <https://github.com/matusnovak/doxybook2/tree/gh-pages>
+Source markdown files for these examples above: <tree/gh-pages>
 
 ### Creating examples locally
 
@@ -112,7 +116,7 @@ This tool has been compiled and tested on Windows (win32 and win64), Linux (amd6
 
 ## Install
 
-Go to https://github.com/matusnovak/doxybook2/releases and download the precompiled binary in the zip file for your target platform. The windows release needs [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads). The binary file `doxybook2.exe` is located in the `bin` folder in the zip file, put it somewhere in your system and add it to the OS `PATH` environment variable.
+Go to releases and download the precompiled binary in the zip file for your target platform. The windows release needs [Microsoft Visual C++ Redistributable for Visual Studio 2015, 2017 and 2019](https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads). The binary file `doxybook2.exe` is located in the `bin` folder in the zip file, put it somewhere in your system and add it to the OS `PATH` environment variable.
 
 ## Install from source
 
@@ -125,7 +129,7 @@ To install from source, simply clone the repository, install the dependencies li
 
 ```bash
 # Clone the project
-git clone https://github.com/matusnovak/doxybook2.git
+git clone https://github.com/Antonz0/doxybook2.git
 cd doxybook2
 
 # ensure you are using C++17 compiler
@@ -219,16 +223,16 @@ Or Linux bash:
 doxybook2 ... --config-data '{"linkSuffix": ""}'
 ```
 
-### GitBook specific usage
+### GitBook/Honkit specific usage
 
-GitBook requires that your `SUMMARY.md` file contains all of the other markdown files. If the markdown file is not listed in here, it will not be generated into a HTML file. Therefore, using `--summary-input` and `--summary-output` you can generate a `SUMMARY.md` file. This works by creating a "template", let's call it `SUMMARY.md.tmpl`. This template file will not get modified by doxybook2. You will need to put in any links you see fit (external links? other markdown files?), and then you will need to add `{{doxygen}}` (including the double curly backets) somewhere in this template summary. Note that the indentation of `{{doxygen}}` matters and will affect the output! Example:
+GitBook/Honkit requires that your `SUMMARY.md` file contains all the other markdown files. If the markdown file is not listed in here, it will not be generated into a HTML file. Therefore, using `--summary-input` and `--summary-output` you can generate a `SUMMARY.md` file. This works by creating a "template", let's call it `SUMMARY.md.tmpl`. This template file will not get modified by doxybook2. You will need to put in any links you see fit (external links? other markdown files?), and then you will need to add `{{doxygen}}` (including the double curly brackets) somewhere in this template summary. Note that the indentation of `{{doxygen}}` matters and will affect the output! Example:
 
 ```
 # Doxybook2 Example
 
 * [Introduction](README.md)
   {{doxygen}}
-* [GitHub](https://github.com/matusnovak/doxybook2)
+* [GitHub](https://github.com/Antonz0/doxybook2)
 ```
 
 And when running:
@@ -255,7 +259,7 @@ The `path/to/SUMMARY.md` will be generated and `{{doxygen}}` will be overwritten
   * [Namespaces](Namespaces/README.md)
     * [Engine](Namespaces/namespace_engine.md)
     [...]
-* [GitHub](https://github.com/matusnovak/doxybook)
+* [GitHub](https://github.com/Antonz0/doxybook)
 ```
 
 There is a sample config and summary template file located in the `example/gitbook` folder in this repository.
@@ -280,7 +284,7 @@ You can create a config file by running:
 doxybook2 --generate-config /some/path/to/config.json
 ```
 
-This will generate config file with **all** available properties with their **default** values. Note that the folder in which you want the `config.json` to be generated must exist. If the file `config.json` already exists, it will be overwritten. You can remove any properties in the config json and leave only the ones you need to override. See the section "Config values" below to see the default values.
+This will generate config file with **all** available properties with their **default** values. Note that the folder in which you want the `config.json` to be generated must exist. If the file `config.json` already exists, it will be overwritten. You can remove any properties in the config JSON and leave only the ones you need to override. See the section "Config values" below to see the default values.
 
 ### Config usage
 
@@ -292,7 +296,7 @@ doxybook2 --input ... --output ... --config /some/path/to/config.json
 
 ### Config examples
 
-Sample config files are provided in the examples folder for each generator and theme used. The config is stored in a `.doxybook` folder. This may not be directly visible by your OS. Show hidden folders to see it. The following config files are provided:
+Sample config files are provided in the examples' folder for each generator and theme used. The config is stored in a `.doxybook` folder. This may not be directly visible by your OS. Show hidden folders to see it. The following config files are provided:
 
 * Hugo + Learn theme - `example/hugo-learn/.doxybook/config.json`
 * Hugo + Book theme - `example/hugo-book/.doxybook/config.json`
@@ -303,96 +307,96 @@ Sample config files are provided in the examples folder for each generator and t
 * GitBook + default theme - `example/gitbook/.doxybook/config.json`
 * Docsify + default theme - `example/docsify/.doxybook/config.json`
 
-**NOTE:** The configuration json files for MkDocs have a base url set, for example `"baseUrl": "/doxybook2/mkdocs-bootswatch/"`. This is needed for publishing documentation from this repository to gh-pages. If you want to run the MkDocs examples locally, make sure you change the baseUrl to `/` as `"baseUrl": "/"`! If you don't change that, you will get 404. Otherwise start a http server with a `/doxybook2/mkdocs-bootswatch` prefix.
+**NOTE:** The configuration JSON files for MkDocs have a base URL set, for example `"baseUrl": "/doxybook2/mkdocs-bootswatch/"`. This is needed for publishing documentation from this repository to `gh-pages`. If you want to run the MkDocs examples locally, make sure you change the `baseUrl` to `/` as `"baseUrl": "/"`! If you don't change that, you will get 404. Otherwise, start a HTTP server with a `/doxybook2/mkdocs-bootswatch` prefix.
 
 ### Config values
 
 The following is a list of config properties, their default value, and description.
 
-| JSON Key | Default Value | Description |
-| -------- | ------------- | ----------- |
-| `copyImages` | `true` | Automatically copy images added into doxygen documentation via `@image`. These images will be copied into folder defined by `imagesFolder` |
-| `sort` | `false` | Sort everything alphabetically. If set to false, the order will stay the same as the order in the Doxygen XML files. |
-| `imagesFolder` | `"images"` | Name of the folder where to copy images. This folder will be automatically created in the output path defined by `--output`. Leave this empty string if you want all of the images to be stored in the root directory (the output directory). |
-| `linkLowercase` | `false` | Convert all markdown links (only links to other markdown files, the C++ related stuff) into lowercase format. Hugo need this to set to `true`. |
-| `linkAndInlineCodeAsHTML` | `false` | Output links as HTML <a> tags and inline code as <code> tags instead of Markdown. If your generated Markdown has links inside of inline code, set this to `true` to correctly render the links. |
-| `indexInFolders` | `false` | Part of the generated markdown output are extra index files. These are more of a list of classes, namespaces, modules, etc. By default these are stored in the root directory (the output diectory). Set to true if you want them to be generated in their respective folders (i.e. class index in Classes folder, etc.) |
-| `mainPageInRoot` | `false` | If a mainpage is defined by Doxygen, then this file will be generated in `Pages/mainpage.md` path. If you want to make it into `index.md` as the root of your website, then set this to true with `mainPageName` set to `"index"`. |
-| `mainPageName` | `"indexpage"` | If a mainpage is defined by Doxygen, then this file will be saved as `indexpage`. |
-| `baseUrl` | `""` | A prefix to put in front of all markdown links (only links to other markdown files). See `linkLowercase` and `linkSuffix` as well. Note hat MkDocs and Hugo will need explicit baseUrl while GitBook uses no base url. VuePress needs this set to `/`. |
-| `linkSuffix` | `".md"` | The suffix to put after all of the markdown links (only links to other markdown files). If using GitBook, leave this to `".md"`, but MkDocs and Hugo needs `"/"` instead. |
-| `fileExt` | `"md"` | The file extension to use when generating markdown files. |
-| `filesFilter` | `[]` | This will filter which files are allowed to be in the output. For example, an array of `[".hpp", ".h"]` will allow only the files that have file extensions `.hpp` or `.h`. When this is empty (by default) then all files are allowed in the output. This also affects `--json` type of output. This does not filter which classes/functions/etc should be extracted from the source files! (For that, use Doxygen's [FILE_PATTERNS](https://www.doxygen.nl/manual/config.html#cfg_file_patterns)) This only affects listing of those files in the output! |
-| `foldersToGenerate` | `["modules", "classes", "files", "pages", "namespaces", "examples"]` | List of folders to create. You can use this to skip generation of some folders, for example you don't want `examples` then remove it from the array. Note, this does not change the name of the folders that will be generated, this only enables them. This is an enum and must be lower case. If you do not set this value in your JSON config file then all of the folders are created. An empty array will not generate anything at all.' |
-| `replaceUnderscoresInAnchors` | `true` | Replace '_' with '-' in anchors. |
+| JSON Key                      | Default Value                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `copyImages`                  | `true`                                                               | Automatically copy images added into Doxygen documentation via `@image`. These images will be copied into folder defined by `imagesFolder`                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `sort`                        | `false`                                                              | Sort everything alphabetically. If set to false, the order will stay the same as the order in the Doxygen XML files.                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `imagesFolder`                | `"images"`                                                           | Name of the folder where to copy images. This folder will be automatically created in the output path defined by `--output`. Leave this empty string if you want all of the images to be stored in the root directory (the output directory).                                                                                                                                                                                                                                                                                                               |
+| `linkLowercase`               | `false`                                                              | Convert all Markdown links (only links to other markdown files, the C++ related stuff) into lowercase format. Hugo need this to set to `true`.                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `linkAndInlineCodeAsHTML`     | `false`                                                              | Output links as HTML <a> tags and inline code as <code> tags instead of Markdown. If your generated Markdown has links inside of inline code, set this to `true` to correctly render the links.                                                                                                                                                                                                                                                                                                                                                             |
+| `indexInFolders`              | `false`                                                              | Part of the generated markdown output are extra index files. These are more of a list of classes, namespaces, modules, etc. By default these are stored in the root directory (the output directory). Set to true if you want them to be generated in their respective folders (i.e. class index in Classes folder, etc.)                                                                                                                                                                                                                                   |
+| `mainPageInRoot`              | `false`                                                              | If a `mainpage` is defined by Doxygen, then this file will be generated in `Pages/mainpage.md` path. If you want to make it into `index.md` as the root of your website, then set this to true with `mainPageName` set to `"index"`.                                                                                                                                                                                                                                                                                                                        |
+| `mainPageName`                | `"indexpage"`                                                        | If a `mainpage` is defined by Doxygen, then this file will be saved as `indexpage`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `baseUrl`                     | `""`                                                                 | A prefix to put in front of all Markdown links (only links to other markdown files). See `linkLowercase` and `linkSuffix` as well. Note hat MkDocs and Hugo will need explicit baseUrl while GitBook uses no base URL. VuePress needs this set to `/`.                                                                                                                                                                                                                                                                                                      |
+| `linkSuffix`                  | `".md"`                                                              | The suffix to put after all of the Markdown links (only links to other markdown files). If using GitBook, leave this to `".md"`, but MkDocs and Hugo needs `"/"` instead.                                                                                                                                                                                                                                                                                                                                                                                   |
+| `fileExt`                     | `"md"`                                                               | The file extension to use when generating markdown files.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `filesFilter`                 | `[]`                                                                 | This will filter which files are allowed to be in the output. For example, an array of `[".hpp", ".h"]` will allow only the files that have file extensions `.hpp` or `.h`. When this is empty (by default) then all files are allowed in the output. This also affects `--json` type of output. This does not filter which classes/functions/etc should be extracted from the source files! (For that, use Doxygen's [FILE_PATTERNS](https://www.doxygen.nl/manual/config.html#cfg_file_patterns)) This only affects listing of those files in the output! |
+| `foldersToGenerate`           | `["modules", "classes", "files", "pages", "namespaces", "examples"]` | List of folders to create. You can use this to skip generation of some folders, for example you don't want `examples` then remove it from the array. Note, this does not change the name of the folders that will be generated, this only enables them. This is an enum and must be lower-case. If you do not set this value in your JSON config file then all of the folders are created. An empty array will not generate anything at all.'                                                                                                               |
+| `replaceUnderscoresInAnchors` | `true`                                                               | Replace '_' with '-' in anchors.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 The following are a list of config properties that specify the names of the folders. Each folder holds specific group of C++ stuff. Note that the `Classes` folder also holds interfaces, structs, and unions.
 
-| JSON Key | Default Value |
-| -------- | ------------- |
-| `folderGroupsName` | `"Modules"` |
-| `folderClassesName` | `"Classes"` |
-| `folderFilesName` | `"Files"` |
-| `folderRelatedPagesName` | `"Pages"` |
-| `folderNamespacesName` | `"Namespaces"` |
-| `folderExamplesName` | `"Examples"` |
+| JSON Key                 | Default Value  |
+| ------------------------ | -------------- |
+| `folderGroupsName`       | `"Modules"`    |
+| `folderClassesName`      | `"Classes"`    |
+| `folderFilesName`        | `"Files"`      |
+| `folderRelatedPagesName` | `"Pages"`      |
+| `folderNamespacesName`   | `"Namespaces"` |
+| `folderExamplesName`     | `"Examples"`   |
 
 The following is a list of config properties that specify the filenames of the indexes. For example, an index/list of all classes will use `index_classes` filename followed by `fileExt` extension name.
 
-| JSON Key | Default Value |
-| -------- | ------------- |
-| `indexGroupsName` | `"index_groups"` |
-| `indexClassesName` | `"index_classes"` |
-| `indexFilesName` | `"index_files"` |
-| `indexRelatedPagesName` | `"index_pages"` |
-| `indexNamespacesName` | `"index_namespaces"` |
-| `indexExamplesName` | `"index_examples"` |
+| JSON Key                | Default Value        |
+| ----------------------- | -------------------- |
+| `indexGroupsName`       | `"index_groups"`     |
+| `indexClassesName`      | `"index_classes"`    |
+| `indexFilesName`        | `"index_files"`      |
+| `indexRelatedPagesName` | `"index_pages"`      |
+| `indexNamespacesName`   | `"index_namespaces"` |
+| `indexExamplesName`     | `"index_examples"`   |
 
 The following are config properties that specify what template to use for each specific C++ kind. A kind is just a type of the C++ thing (class, namespace, etc.). This also includes properties for files, directories, pages, and modules (alias groups). These templates can be overwritten via `--templates /path/to/templates-folder`.
 
-| JSON Key | Default Value |
-| -------- | ------------- |
-| `templateKindClass` | `"kind_class"` |
-| `templateKindStruct` | `"kind_class"` |
-| `templateKindUnion` | `"kind_class"` |
-| `templateKindInterface` | `"kind_class"` |
+| JSON Key                | Default Value     |
+| ----------------------- | ----------------- |
+| `templateKindClass`     | `"kind_class"`    |
+| `templateKindStruct`    | `"kind_class"`    |
+| `templateKindUnion`     | `"kind_class"`    |
+| `templateKindInterface` | `"kind_class"`    |
 | `templateKindNamespace` | `"kind_nonclass"` |
-| `templateKindGroup` | `"kind_nonclass"` |
-| `templateKindFile` | `"kind_file"` |
-| `templateKindDir` | `"kind_file"` |
-| `templateKindPage` | `"kind_page"` |
-| `templateKindExample` | `"kind_example"` |
+| `templateKindGroup`     | `"kind_nonclass"` |
+| `templateKindFile`      | `"kind_file"`     |
+| `templateKindDir`       | `"kind_file"`     |
+| `templateKindPage`      | `"kind_page"`     |
+| `templateKindExample`   | `"kind_example"`  |
 
 Same as above, but these are related to the index/list files.
 
-| JSON Key | Default Value |
-| -------- | ------------- |
-| `templateIndexClasses` | `"index_classes"` |
-| `templateIndexNamespaces` | `"index_namespaces"` |
-| `templateIndexGroups` | `"index_groups"` |
-| `templateIndexFiles` | `"index_files"` |
-| `templateIndexRelatedPages` | `"index_pages"` |
-| `templateIndexExamples` | `"index_examples"` |
+| JSON Key                    | Default Value        |
+| --------------------------- | -------------------- |
+| `templateIndexClasses`      | `"index_classes"`    |
+| `templateIndexNamespaces`   | `"index_namespaces"` |
+| `templateIndexGroups`       | `"index_groups"`     |
+| `templateIndexFiles`        | `"index_files"`      |
+| `templateIndexRelatedPages` | `"index_pages"`      |
+| `templateIndexExamples`     | `"index_examples"`   |
 
 These properties define the title to use in the templates specified above.
 
-| JSON Key | Default Value |
-| -------- | ------------- |
-| `indexClassesTitle` | `"Classes"` |
-| `indexNamespacesTitle` | `"Namespaces"` |
-| `indexGroupsTitle` | `"Modules"` |
-| `indexFilesTitle` | `"Files"` |
-| `indexRelatedPagesTitle` | `"Pages"` |
-| `indexExamplesTitle` | `"Examples"` |
+| JSON Key                 | Default Value  |
+| ------------------------ | -------------- |
+| `indexClassesTitle`      | `"Classes"`    |
+| `indexNamespacesTitle`   | `"Namespaces"` |
+| `indexGroupsTitle`       | `"Modules"`    |
+| `indexFilesTitle`        | `"Files"`      |
+| `indexRelatedPagesTitle` | `"Pages"`      |
+| `indexExamplesTitle`     | `"Examples"`   |
 
 These properties modify how Latex formulas should be generated.
 
-| JSON Key | Default Value | Description |
-| -------- | ------------- | ----------- |
-| `formulaInlineStart` | `"\\("` | The string to prepend the inline formula with in Markdown. |
-| `formulaInlineEnd` | `"\\)"` | The string to append the inline formula with in Markdown. |
-| `formulaBlockStart` | `"\\["` | The string to prepend the block formula with in Markdown. |
-| `formulaBlockEnd` | `"\\]"` | The string to append the block formula with in Markdown. |
+| JSON Key             | Default Value | Description                                                |
+| -------------------- | ------------- | ---------------------------------------------------------- |
+| `formulaInlineStart` | `"\\("`       | The string to prepend the inline formula with in Markdown. |
+| `formulaInlineEnd`   | `"\\)"`       | The string to append the inline formula with in Markdown.  |
+| `formulaBlockStart`  | `"\\["`       | The string to prepend the block formula with in Markdown.  |
+| `formulaBlockEnd`    | `"\\]"`       | The string to append the block formula with in Markdown.   |
 
 ## Latex formulas
 
@@ -423,11 +427,11 @@ The distance between \((x_1,y_1)\) and \((x_2,y_2)\) is
 
 ## Templates
 
-This doxybook utility uses templates very similar to Jinja on Python. The template engine used is [inja](https://github.com/pantor/inja) for C++. There are already predefined templates stored inside of the doxybook executable file. If you do not specify an explicit template folder via `--templates` the default templates will be used.
+This Doxybook2 utility uses templates very similar to Jinja on Python. The template engine used is [inja](https://github.com/pantor/inja) for C++. There are already predefined templates stored inside the Doxybook2 executable file. If you do not specify an explicit template folder via `--templates` the default templates will be used.
 
 ### Generate default templates
 
-You can dump the default templates into a specific folder by calling doxybook as:
+You can dump the default templates into a specific folder by calling Doxybook2 as:
 
 ```
 doxybook2 --generate-templates /path/to/folder
@@ -443,50 +447,50 @@ To use the templates, simply create a folder, put some templates in there **endi
 doxybook2 --input ... --output ... --templates /path/to/folder
 ```
 
-Just as the config, if the folder does not contain a specific template, the default one will be used. For example, Hugo (Book theme) needs an extra `type: docs` in the header of the markdown. The folder `example/hugo-book/.doxybook/templates` contains a single template template file named `meta.tmpl`. This template is used by `header` template which is then further used by the `kind_class`, `kind_namespace`, and so on. There are no other template files in that example directory, therefore the default ones will be used.
+Just as the config, if the folder does not contain a specific template, the default one will be used. For example, Hugo (Book theme) needs an extra `type: docs` in the header of the markdown. The folder `example/hugo-book/.doxybook/templates` contains a single template file named `meta.tmpl`. This template is used by `header` template which is then further used by the `kind_class`, `kind_namespace`, and so on. There are no other template files in that example directory, therefore the default ones will be used.
 
-To use custom templates, simply add them to to the directory specified by the `--templates <dir>`.
+To use custom templates, simply add them to the directory specified by the `--templates <dir>`.
 
-**The following are core templates that are needed to generate the output.** All of these templates are defined by the configuration file (see section "Config values" above). For example, the config key `templateKindGroup` is by default `kind_nonclass`, therefore the render engine expects `kind_nonclass.tmpl` in your templates folder (if exists).
+**The following are core templates that are needed to generate the output.** All of these templates are defined by the configuration file (see section "Config values" above). For example, the config key `templateKindGroup` is by default `kind_nonclass`, therefore the render engine expects `kind_nonclass.tmpl` in your `templates` folder (if exists).
 
-* templateIndexExamples
-* templateIndexFiles
-* templateIndexGroups
-* templateIndexNamespaces
-* templateIndexRelatedPages
-* templateKindClass
-* templateKindExample
-* templateKindFile
-* templateKindGroup
-* templateKindDir
-* templateKindNamespace
-* templateKindPage
-* templateKindUnion
-* templateKindInterface
-* templateKindStruct
+* `templateIndexExamples`
+* `templateIndexFiles`
+* `templateIndexGroups`
+* `templateIndexNamespaces`
+* `templateIndexRelatedPages`
+* `templateKindClass`
+* `templateKindExample`
+* `templateKindFile`
+* `templateKindGroup`
+* `templateKindDir`
+* `templateKindNamespace`
+* `templateKindPage`
+* `templateKindUnion`
+* `templateKindInterface`
+* `templateKindStruct`
 
-**The following are template names used by the core templates above.** These templates are simply dependencies of the templates above. They are being included by `{% include "meta" %}` or by `{{ render(member_details, child) }}` inside of the templates above.
+**The following are template names used by the core templates above.** These templates are simply dependencies of the templates above. They are being included by `{% include "meta" %}` or by `{{ render(member_details, child) }}` inside the templates above.
 
-* meta
-* header
-* footer
-* index
-* breadcrumbs
-* member_details
-* mode_details
-* class_members_tables
-* class_members_inherited_tables
-* class_members_details
+* `meta`
+* `header`
+* `footer`
+* `index`
+* `breadcrumbs`
+* `member_details`
+* `mode_details`
+* `class_members_tables`
+* `class_members_inherited_tables`
+* `class_members_details`
 
 ### Custom templates detailed example
 
-First, generate the default templates (this simply copies them from the executable file to the destination directory) by running `doxybook --generate-templates <dir>`. Let's say you want to override the fooder with some custom markdown. Find the `footer.tmpl` file and change the contents with whatever you want. You can delete the rest of the templates that you have not modified. Now run the executable with the `--templates <dir>` option. This will use your custom `footer.tmpl`.
+First, generate the default templates (this simply copies them from the executable file to the destination directory) by running `doxybook --generate-templates <dir>`. Let's say you want to override the footer with some custom markdown. Find the `footer.tmpl` file and change the contents with whatever you want. You can delete the rest of the templates that you have not modified. Now run the executable with the `--templates <dir>` option. This will use your custom `footer.tmpl`.
 
-When the doxybook runs, the list of templates that are loaded is printed to the terminal right at the beginning. For example, if the template is loaded from your folder, it will print `Parsing template: 'footer' from file: '/path/to/templates/footer.tmpl`. If the template is loaded from the executable file itself (the default templates), it will print the following: `Parsing template: 'footer' from default` instead.
+When the Doxybook2 runs, the list of templates that are loaded is printed to the terminal right at the beginning. For example, if the template is loaded from your folder, it will print `Parsing template: 'footer' from file: '/path/to/templates/footer.tmpl`. If the template is loaded from the executable file itself (the default templates), it will print the following: `Parsing template: 'footer' from default` instead.
 
-Now, let's say that you want to change how enums are printed (the enum table that has Enumerator, Value, and Description columns). This is located in the `member_details` template. This template is used as `{{ render("member_details", child) }}` inside of `class_members_details` and `nonclass_members_details` templates. So you only need to run `doxybook --generate-templates <dir>` and only keep `member_details.tmpl` and change it however you want.
+Now, let's say that you want to change how enums are printed (the enum table that has Enumerator, Value, and Description columns). This is located in the `member_details` template. This template is used as `{{ render("member_details", child) }}` inside the `class_members_details` and `nonclass_members_details` templates. So you only need to run `doxybook --generate-templates <dir>` and only keep `member_details.tmpl` and change it however you want.
 
-Why `render` instead of `include`? The `include` is a keyword from the inja template engine to insert the child template file. All of the variables that are accessible in the parent template are also accessible in the child template being included. Think of it as copy pasting the contents of the child template and putting them into the parent template. The render method has a different context (global data). This means that you can pass in subset of the data accessible in the parent template. In this case, the `class_members_details` has a JSON data that also has an array `publicTypes` (if the class/struct has any public types). By default the `class_members_details` has something like this:
+Why `render` instead of `include`? The `include` is a keyword from the inja template engine to insert the child template file. All of the variables that are accessible in the parent template are also accessible in the child template being included. Think of it as copy-pasting the contents of the child template and putting them into the parent template. The render method has a different context (global data). This means that you can pass in subset of the data accessible in the parent template. In this case, the `class_members_details` has a JSON data that also has an array `publicTypes` (if the class/struct has any public types). By default, the `class_members_details` has something like this:
 
 ```
 {% for child in publicTypes %}
@@ -494,7 +498,7 @@ Why `render` instead of `include`? The `include` is a keyword from the inja temp
 {% endfor %}
 ```
 
-That will simply loop over the public types and renders the child by passing the array element of `publicTypes` to the render function. The render function will render the template which global context (all of the accessible data) is going to be the `child` object.
+That will simply loop over the public types and renders the child by passing the array element of `publicTypes` to the render function. The render function will render the template which global context (all the accessible data) is going to be the `child` object.
 
 To see what does the JSON (the global data/context in the template) looks like, simply add `--debug-templates` to the command line. This will generate `*.md.json` files. Imagine that this JSON is passed into `render(..., json)` when generating, for example, `group__audio.md` (or any other markdown file except the GitBook summary file).
 
@@ -508,7 +512,7 @@ Including or rendering templates by their name with no extension is only possibl
 
 You can add `--debug-templates` into the command line (with no arguments) and a JSON file will be created alongside each of the markdown file. For example, if a markdown file `group___engine.md` will be created, the JSON will be created as `group___engine.md.json`.
 
-Why is this useful and why JSON? The JSON is the container between C++ data and the [inja](https://github.com/pantor/inja) template engine. So inside the template you may find something as this: `{% for param in params %}...{% endfor %}`. This `params` variable is extracted from the JSON. This is also the exact same JSON generated in the JSON-only output. The JSON is simply put into the render function of the inja template engine.
+Why is this useful and why JSON? The JSON is the container between C++ data and the [inja](https://github.com/pantor/inja) template engine. So inside the template you may find something as this: `{% for param in params %}...{% endfor %}`. This `params` variable is extracted from the JSON. This is also the exact same JSON generated in the JSON-only output. The JSON is simply put into the render function of the **inja** template engine.
 
 ## Use as a library
 
@@ -572,17 +576,22 @@ int main() {
 
 ## Contributing
 
-Pull requests are welcome! Feel free to submit a pull requesr to the GitHub of this repository <https://github.com/matusnovak/doxybook2/pulls>.
+Pull requests are welcome!
+
+Feel free to submit a pull request to the GitHub of this repository <https://github.com/Antonz0/doxybook2/pulls>.
 
 ## Issues
 
-Got any questions or found a bug? Feel free to submit them to the GitHub issues of this repository <https://github.com/matusnovak/doxybook2/issues>.
+Got any questions or found a bug?
+
+Feel free to submit them to the GitHub issues of this repository <https://github.com/Antonz0/doxybook2/issues>.
 
 ## Known Problems
 
-#### cannot use operator[] with a string argument with number
-
-This is a bug caused by the [inja](https://github.com/pantor/inja) dependency in version `3.0.0` and fixed in version `3.1.0`. At the time of writing this, vcpkg only has the broken version `3.0.0`. To fix this problem, use `--head` option when installing `inja` to get the bug-free latest version. See [issue #19](https://github.com/matusnovak/doxybook2/issues/19) for more information.
+## Comparable alternatives
+* [m.css](https://mcss.mosra.cz/documentation/doxygen/) - A modern, mobile-friendly drop-in replacement for the stock Doxygen HTML output
+* [standardese](https://github.com/standardese/standardese) - Standardese aims to be a next-gen Doxygen.
+* [HDoc](https://hdoc.io/) - The modern documentation tool for C++
 
 ## License
 
@@ -590,6 +599,8 @@ This is a bug caused by the [inja](https://github.com/pantor/inja) dependency in
 The MIT License
 
 Copyright (c) 2019-2020 Matus Novak email@matusnovak.com
+
+Copyright (c) 2024 Anton Breusov anton.breusov@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
