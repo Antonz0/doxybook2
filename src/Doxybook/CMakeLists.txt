@@ -24,6 +24,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "doxybook2")
 target_include_directories(${PROJECT_NAME} PUBLIC ${DOXYDOWN_INCLUDE_DIR})
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
+# Definitions
 if(MSVC)
   target_compile_definitions(${PROJECT_NAME} PRIVATE _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS)
 
