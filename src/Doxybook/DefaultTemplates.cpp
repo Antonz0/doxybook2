@@ -380,8 +380,7 @@ static std::string createTableForAttributeLike(const std::string& visibility,
     return ss.str();
 }
 
-static std::string createTableForJavaEnumConstants(const std::string& title,
-    const std::string& key) {
+static std::string createTableForJavaEnumConstants(const std::string& title, const std::string& key) {
     std::stringstream ss;
     ss << "{%- if exists(\"" << key << "\") %}";
     ss << "## " << title << "\n";
@@ -395,7 +394,6 @@ static std::string createTableForJavaEnumConstants(const std::string& title,
 
     return ss.str();
 }
-
 
 static std::string createTableForFriendLike(const std::string& title, const std::string& key, const bool inherited) {
     std::stringstream ss;
@@ -585,7 +583,8 @@ static std::string createNonMemberTable() {
 {% endif -%})";
     ss << "\n\n";
 
-    ss << createTableForNamespaceLike("public", R"({% if language == "java" %}Packages{% else %}Namespaces{% endif %})", "namespaces", false);
+    ss << createTableForNamespaceLike(
+        "public", R"({% if language == "java" %}Packages{% else %}Namespaces{% endif %})", "namespaces", false);
     ss << createTableForClassLike("public", "Classes", "publicClasses", false);
     ss << createTableForTypeLike("public", "Types", "publicTypes", false);
     ss << createTableForFunctionLike("public", "Slots", "publicSlots", false);
@@ -635,7 +634,7 @@ template <{% for param in templateParams %}{{param.typePlain}} {{param.name}}{% 
 | Enumerator | Value | Description |
 | ---------- | ----- | ----------- |
 {% for enumvalue in enumvalues %}| {{enumvalue.name}} | {% if existsIn(enumvalue, "initializer") -%}
-{{replace(replace(enumvalue.initializer, "= ", ""), "|", "\\|"))}}{% endif -%}
+{{replace(replace(enumvalue.initializer, "= ", ""), "|", "\\|")}}{% endif -%}
 | {% if existsIn(enumvalue, "brief") %}{{enumvalue.brief}}{% endif %} {% if existsIn(enumvalue, "details") %}{{enumvalue.details}}{% endif %} |
 {% endfor %}
 {% endif -%}

@@ -11,7 +11,6 @@
 #include <spdlog/spdlog.h>
 #include <string>
 
-
 #define xstr(a) str(a)
 #define str(a) #a
 
@@ -85,7 +84,7 @@ int main(int argc, char* argv[]) {
         }
 
         else if (args["version"].as<bool>()) {
-            std::cerr << version;
+            std::cerr << version << std::endl;
             return EXIT_SUCCESS;
         }
 
