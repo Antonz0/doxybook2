@@ -2,8 +2,37 @@
   "name": "doxybook2",
   "version-string": "1.5.0",
   "builtin-baseline": "1085a57da0725c19e19586025438e8c16f34c890",
-  "dependencies": [ "catch2", "fmt", "dirent", "fmt", "nlohmann-json", "inja", "cxxopts", "spdlog" ],
+  "dependencies": [
+    {
+      "name": "spdlog",
+      "version>=": "1.15.1"
+    },
+    {
+      "name": "inja",
+      "version>=": "3.4.0"
+    },
+    {
+      "name": "fmt",
+      "version>=": "11.0.2"
+    },
+    {
+      "name": "cxxopts",
+      "version>=": "3.2.1"
+    },
+    {
+      "name": "dirent",
+      "version>=": "1.23.2"
+    },
+    {
+      "name": "nlohmann-json",
+      "version>=": "3.11.3"
+    },
+    "catch2"
+  ],
   "overrides": [
-    { "name": "catch2", "version": "2.13.8" }
+    {
+      "name": "catch2",
+      "version": "2.13.9"
+    }
   ]
 }
