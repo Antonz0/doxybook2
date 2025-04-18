@@ -12,6 +12,9 @@ on:
       - 'develop'
       - 'master'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: ${{ matrix.name }}
@@ -231,8 +234,9 @@ jobs:
       - name: Download Hugo
         shell: bash
         run: |
-          wget https://github.com/gohugoio/hugo/releases/download/v0.74.1/hugo_extended_0.74.1_Linux-64bit.tar.gz
-          tar xvf hugo_extended_0.74.1_Linux-64bit.tar.gz
+          HUGO_VERSION=0.74.1
+          wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz
+          tar xvf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz
           sudo mv ./hugo /usr/local/bin/hugo
           sudo chmod +x /usr/local/bin/hugo
           hugo version
@@ -256,9 +260,11 @@ jobs:
       - name: Download Doxygen
         shell: bash
         run: |
-          wget https://netcologne.dl.sourceforge.net/project/doxygen/rel-1.8.17/doxygen-1.8.17.linux.bin.tar.gz
-          tar -xvzf doxygen-1.8.17.linux.bin.tar.gz
-          sudo cp ./doxygen-1.8.17/bin/doxygen /usr/local/bin/doxygen
+          DOXYGEN_VERSION=1.13.2
+          DOXYGEN_VERSION_UNDERSCORE=$(echo "$DOXYGEN_VERSION" | tr '.' '_')
+          wget https://github.com/doxygen/doxygen/releases/download/Release_${DOXYGEN_VERSION_UNDERSCORE}/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
+          tar -xvzf doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz
+          sudo cp ./doxygen-${DOXYGEN_VERSION}/bin/doxygen /usr/local/bin/doxygen
           sudo chmod +x /usr/local/bin/doxygen
 
       - name: Download Doxybook2 artifact
