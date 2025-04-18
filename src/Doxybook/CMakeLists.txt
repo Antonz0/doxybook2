@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.21)
 project(Doxybook2)
 
 # Dependencies
@@ -7,7 +7,8 @@ if(NOT USE_CPM)
   find_package(fmt CONFIG REQUIRED)
   find_package(nlohmann_json CONFIG REQUIRED)
   find_package(spdlog CONFIG REQUIRED)
-  if (MSVC)
+
+  if(MSVC)
     find_package(Dirent REQUIRED)
   endif()
 endif()
@@ -23,6 +24,15 @@ set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "doxybook2")
 target_include_directories(${PROJECT_NAME} PUBLIC ${DOXYDOWN_INCLUDE_DIR})
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 
+# Definitions
+if(MSVC)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS)
+
+  # See issue there: https://github.com/actions/runner-images/issues/10004#issuecomment-2156109231
+  # and there: https://github.com/gabime/spdlog/issues/3119#issuecomment-2218733127
+  target_compile_definitions(${PROJECT_NAME} PRIVATE _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+endif()
+
 # Install
 install(TARGETS ${PROJECT_NAME}
   EXPORT ${PROJECT_NAME}
@@ -36,6 +46,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../include
 
 # Libraries
 target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt fmt::fmt-header-only spdlog::spdlog_header_only pantor::inja nlohmann_json nlohmann_json::nlohmann_json)
+
 if(MSVC)
   target_link_libraries(${PROJECT_NAME} PRIVATE Dirent)
 endif()

@@ -1,6 +1,8 @@
 #pragma once
+
 #include "Enums.hpp"
 #include "Xml.hpp"
+
 #include <list>
 #include <memory>
 #include <string>
@@ -16,7 +18,7 @@ namespace Doxybook2 {
     typedef std::unordered_map<std::string, NodePtr> NodeCacheMap;
 
     class Node {
-      public:
+    public:
         typedef std::list<NodePtr> Children;
 
         struct ClassReference {
@@ -106,6 +108,7 @@ namespace Doxybook2 {
         };
 
         typedef std::unordered_map<std::string, Data> ChildrenData;
+        typedef std::tuple<Data, ChildrenData> LoadDataResult;
 
         // Parse root xml objects (classes, structs, etc)
         static NodePtr
@@ -219,7 +222,7 @@ namespace Doxybook2 {
             const TextPrinter& plainPrinter,
             const TextPrinter& markdownPrinter,
             const NodeCacheMap& cache);
-        typedef std::tuple<Data, ChildrenData> LoadDataResult;
+        void makeUrl(const Config& config);
         LoadDataResult loadData(const Config& config,
             const TextPrinter& plainPrinter,
             const TextPrinter& markdownPrinter,
@@ -227,7 +230,7 @@ namespace Doxybook2 {
 
         friend class Doxygen;
 
-      private:
+    private:
         class Temp;
         Data loadData(const Config& config,
             const TextPrinter& plainPrinter,
