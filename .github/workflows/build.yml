@@ -12,11 +12,11 @@ on:
       - 'develop'
       - 'master'
 
-permissions:
-  contents: write
-
 jobs:
   build:
+    permissions:
+      contents: write
+      packages: write
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -214,6 +214,8 @@ jobs:
     name: Pages
     needs: [build]
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
