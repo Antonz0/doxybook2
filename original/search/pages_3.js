@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['introduction_256',['Introduction',['../intro.html',1,'index']]]
+  ['example_0',['Doxybook2 Example',['../index.html',1,'']]]
 ];

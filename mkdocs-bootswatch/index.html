@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,14 +10,15 @@
         <link rel="shortcut icon" href="img/favicon.ico">
         <title>Doxybook2 Example</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/fontawesome.min.css" rel="stylesheet">
+        <link href="css/brands.min.css" rel="stylesheet">
+        <link href="css/solid.min.css" rel="stylesheet">
+        <link href="css/v4-font-face.min.css" rel="stylesheet">
         <link href="css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/docco.min.css">
-
-        <script src="js/jquery-1.10.2.min.js" defer></script>
-        <script src="js/bootstrap.min.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script> 
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/docco.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
     </head>
 
     <body class="homepage">
@@ -25,7 +26,7 @@
             <div class="container">
                 <a class="navbar-brand" href=".">Doxybook2 Example</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -33,32 +34,32 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="/doxybook2/mkdocs-bootswatch/" class="nav-link">Home</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="/doxybook2/mkdocs-bootswatch/Classes" class="nav-link">Classes</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="/doxybook2/mkdocs-bootswatch/Namespaces" class="nav-link">Namespaces</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="/doxybook2/mkdocs-bootswatch/Modules" class="nav-link">Modules</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="/doxybook2/mkdocs-bootswatch/Files" class="nav-link">Files</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="/doxybook2/mkdocs-bootswatch/Pages" class="nav-link">Related Pages</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="/doxybook2/mkdocs-bootswatch/Examples" class="nav-link">Examples</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -69,64 +70,124 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#doxybook2-example" class="nav-link">Doxybook2 Example</a>
-              <ul class="nav flex-column">
-            <li class="nav-item" data-level="2"><a href="#images" class="nav-link">Images:</a>
+            <li class="nav-item" data-bs-level="1"><a href="#doxybook2-example" class="nav-link">Doxybook2 Example</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#refs" class="nav-link">Refs:</a>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#images" class="nav-link">Images:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#simple-list" class="nav-link">Simple list:</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_2" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#refs" class="nav-link">Refs:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#enumerated-list" class="nav-link">Enumerated list:</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_3" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#simple-list" class="nav-link">Simple list:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#hyper-links" class="nav-link">Hyper links:</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_4" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#enumerated-list" class="nav-link">Enumerated list:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#code-blocks" class="nav-link">Code blocks:</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_5" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#hyper-links" class="nav-link">Hyper links:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#subpages" class="nav-link">Subpages:</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_6" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#code-blocks" class="nav-link">Code blocks:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#snippet" class="nav-link">Snippet:</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_7" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#subpages" class="nav-link">Subpages:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#table" class="nav-link">Table:</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_8" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#snippet" class="nav-link">Snippet:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#inline-formula" class="nav-link">Inline formula</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_9" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#table" class="nav-link">Table:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#block-formula" class="nav-link">Block formula</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_10" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#inline-formula" class="nav-link">Inline formula</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-level="2"><a href="#blockquote" class="nav-link">Blockquote</a>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_11" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#block-formula" class="nav-link">Block formula</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_12" class="nav-link"></a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#blockquote" class="nav-link">Blockquote</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -139,13 +200,16 @@
 
 <h1 id="doxybook2-example">Doxybook2 Example</h1>
 <p>This is a mainpage of Doxybook2 example output. This file is generated from <code>\mainpage</code> command within <a href="/doxybook2/mkdocs-bootswatch/Files/Engine_8hpp/#file-engine.hpp">Engine.hpp</a> file.</p>
+<h1 id="_1"></h1>
 <h2 id="images">Images:</h2>
 <p><img alt="doxygen.png" src="/doxybook2/mkdocs-bootswatch/images/doxygen.png" /></p>
+<h1 id="_2"></h1>
 <h2 id="refs">Refs:</h2>
 <ul>
 <li><a href="/doxybook2/mkdocs-bootswatch/Classes/classEngine_1_1Graphics_1_1Texture/">Some texture class ref</a></li>
 <li><a href="/doxybook2/mkdocs-bootswatch/Classes/classEngine_1_1Audio_1_1AudioBuffer/">Some audio buffer class ref</a></li>
 </ul>
+<h1 id="_3"></h1>
 <h2 id="simple-list">Simple list:</h2>
 <ul>
 <li>list item 1<ul>
@@ -166,6 +230,7 @@
 </ul>
 </li>
 </ul>
+<h1 id="_4"></h1>
 <h2 id="enumerated-list">Enumerated list:</h2>
 <ol>
 <li>list item 1<ul>
@@ -185,10 +250,12 @@
 </ul>
 </li>
 </ol>
+<h1 id="_5"></h1>
 <h2 id="hyper-links">Hyper links:</h2>
 <ul>
 <li><a href="https://github.com/matusnovak/doxybook2">GitHub repository</a></li>
 </ul>
+<h1 id="_6"></h1>
 <h2 id="code-blocks">Code blocks:</h2>
 <pre><code class="language-cpp">#include &lt;iostream&gt;
 
@@ -197,12 +264,14 @@ int main(int argc, char** argv) {
     return 0;
 }
 </code></pre>
+<h1 id="_7"></h1>
 <h2 id="subpages">Subpages:</h2>
 <p>This manual is divided in the following sections:</p>
 <ul>
 <li><a href="/doxybook2/mkdocs-bootswatch/Pages/intro/#page-intro">Introduction</a></li>
 <li><a href="/doxybook2/mkdocs-bootswatch/Pages/advanced/#page-advanced">Advanced usage</a></li>
 </ul>
+<h1 id="_8"></h1>
 <h2 id="snippet">Snippet:</h2>
 <pre><code class="language-cpp">
 #include &quot;Engine.hpp&quot;
@@ -221,6 +290,7 @@ int main() {
 }
 </code></pre>
 <p><em>Filename: example-1.cpp</em></p>
+<h1 id="_9"></h1>
 <h2 id="table">Table:</h2>
 <table>
 <thead>
@@ -243,17 +313,28 @@ int main() {
 </tr>
 </tbody>
 </table>
+<h1 id="_10"></h1>
 <h2 id="inline-formula">Inline formula</h2>
 <p>Please see mkdocs-readthedocs example at <a href="https://matusnovak.github.io/doxybook2/mkdocs-readthedocs/">https://matusnovak.github.io/doxybook2/mkdocs-readthedocs/</a> to see a working example using mkdocs + pymdownx.arithmatex</p>
 <p>The distance between ((x_1,y_1)) and ((x_2,y_2)) is (\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}).</p>
+<h1 id="_11"></h1>
 <h2 id="block-formula">Block formula</h2>
-<p>[ |I_2|=\left| \int_{0}^T \psi(t) \left{ u(a,t)- \int_{\gamma(t)}^a \frac{d\theta}{k(\theta,t)} \int_{a}^\theta c(\xi)u_t(\xi,t)\,d\xi \right} dt \right| ]</p>
+<p>[    |I_2|=\left| \int_{0}^T \psi(t)
+             \left{
+                u(a,t)-
+                \int_{\gamma(t)}^a
+                \frac{d\theta}{k(\theta,t)}
+                \int_{a}^\theta c(\xi)u_t(\xi,t)\,d\xi
+             \right} dt
+          \right|
+]</p>
+<h1 id="_12"></h1>
 <h2 id="blockquote">Blockquote</h2>
 <blockquote>
 <p>This is some random blockquote! </p>
 </blockquote>
 <hr />
-<p>Updated on 2022-10-19 at 22:22:01 +0000</p></div>
+<p>Updated on 2025-04-18 at 13:40:37 +0000</p></div>
             </div>
         </div>
 
@@ -261,19 +342,20 @@ int main() {
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
+        <script src="js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = ".",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="js/base.js" defer></script>
-        <script src="search/main.js" defer></script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -293,7 +375,7 @@ int main() {
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
@@ -333,6 +415,6 @@ int main() {
 </html>
 
 <!--
-MkDocs version : 1.4.1
-Build Date UTC : 2022-10-19 22:22:02.416851+00:00
+MkDocs version : 1.6.1
+Build Date UTC : 2025-04-18 13:40:37.799019+00:00
 -->

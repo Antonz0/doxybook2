@@ -107,10 +107,6 @@
   </url>
   
   <url>
-    <loc>https://matusnovak.github.io/doxybook2/hugo-book/classes/classengine_1_1graphics_1_1texture3d/</loc>
-  </url>
-  
-  <url>
     <loc>https://matusnovak.github.io/doxybook2/hugo-book/namespaces/namespaceengine_1_1gui/</loc>
   </url>
   
@@ -280,6 +276,10 @@
   
   <url>
     <loc>https://matusnovak.github.io/doxybook2/hugo-book/files/utils_8hpp/</loc>
+  </url>
+  
+  <url>
+    <loc>https://matusnovak.github.io/doxybook2/hugo-book/namespaces/namespacestd/</loc>
   </url>
   
   <url>

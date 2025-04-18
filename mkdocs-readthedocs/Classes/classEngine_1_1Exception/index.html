@@ -8,7 +8,7 @@
     <title>Engine::Exception - Doxybook2 Example</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
@@ -17,12 +17,11 @@
         var mkdocs_page_url = null;
       </script>
     
-    <script src="../../js/jquery-3.6.0.min.js" defer></script>
     <!--[if lt IE 9]>
       <script src="../../js/html5shiv.min.js"></script>
     <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-      <script>hljs.initHighlightingOnLoad();</script> 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
 </head>
 
 <body class="wy-body-for-nav" role="document">
@@ -34,7 +33,7 @@
           <a href="../.." class="icon icon-home"> Doxybook2 Example
         </a><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
@@ -76,7 +75,7 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../classEngine_1_1Audio_1_1AudioManager/">Engine::Audio::AudioManager</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Engine::Exception</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Engine::Exception</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#public-functions">Public Functions</a>
     </li>
@@ -99,8 +98,6 @@
                   <li class="toctree-l1"><a class="reference internal" href="../classEngine_1_1Graphics_1_1Texture/">Engine::Graphics::Texture</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../classEngine_1_1Graphics_1_1Texture2D/">Engine::Graphics::Texture2D</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../classEngine_1_1Graphics_1_1Texture3D/">Engine::Graphics::Texture3D</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../classEngine_1_1Gui_1_1GuiWidget/">Engine::Gui::GuiWidget</a>
                   </li>
@@ -210,6 +207,8 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../Namespaces/namespaceEngine_1_1Utils_1_1Path/">Engine::Utils::Path</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Namespaces/namespacestd/">std</a>
+                  </li>
               </ul>
               <p class="caption"><span class="caption-text">Pages</span></p>
               <ul>
@@ -239,9 +238,9 @@
       <div class="wy-nav-content">
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
-          <li>Classes &raquo;</li>
-      <li>Engine::Exception</li>
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Classes</li>
+      <li class="breadcrumb-item active">Engine::Exception</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -253,7 +252,7 @@
                 <h1 id="engineexception">Engine::Exception</h1>
 <p><strong>Module:</strong> <strong><a href="/doxybook2/mkdocs-readthedocs/Modules/group__Engine/">An example game engine</a></strong></p>
 <p><code>#include &lt;Exception.hpp&gt;</code></p>
-<p>Inherits from exception</p>
+<p>Inherits from std::exception</p>
 <h2 id="public-functions">Public Functions</h2>
 <table>
 <thead>
@@ -290,7 +289,7 @@
 <pre><code class="language-cpp">inline const char * what() const override
 </code></pre>
 <hr />
-<p>Updated on 2022-10-19 at 22:21:59 +0000</p>
+<p>Updated on 2025-04-18 at 13:40:35 +0000</p>
               
             </div>
           </div><footer>
@@ -326,17 +325,18 @@
     
   </span>
 </div>
-    <script>var base_url = '../..';</script>
-    <script src="../../js/theme_extra.js" defer></script>
-    <script src="../../js/theme.js" defer></script>
-      <script src="../../javascripts/config.js" defer></script>
-      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6" defer></script>
-      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
-      <script src="../../search/main.js" defer></script>
-    <script defer>
-        window.onload = function () {
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../javascripts/config.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
             SphinxRtdTheme.Navigation.enable(true);
-        };
+        });
     </script>
 
 </body>
