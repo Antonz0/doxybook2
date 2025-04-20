@@ -109,6 +109,9 @@ jobs:
         env:
           VCPKG_ROOT: ${{ env.VCPKG_ROOT }}
         run: |
+          APP_VERSION=$(git describe --always --abbrev=8 --first-parent --match=v*)
+          echo "APP_VERSION=${APP_VERSION}" >> ${GITHUB_ENV}
+          echo "App version: ${APP_VERSION}"
           mkdir build
           mkdir install
           if [ "$RUNNER_OS" == "Windows" ]; then
@@ -163,6 +166,8 @@ jobs:
       - name: Package
         id: create_artifact
         shell: bash
+        env:
+          APP_VERSION: ${{ env.APP_VERSION }}
         run: |
           mkdir release
           if [ "$RUNNER_OS" == "Windows" ]; then
@@ -173,7 +178,7 @@ jobs:
             zip -r ./../doxybook2.zip *
             popd
           fi
-          NAME=doxybook2-${{ matrix.suffix }}-$(git describe --always).zip
+          NAME=doxybook2-${{ matrix.suffix }}-${{ env.APP_VERSION }}.zip
           mv -v ./doxybook2.zip release/${NAME}
           echo "name=${NAME}" >> $GITHUB_OUTPUT
           echo "path=release/${NAME}" >> $GITHUB_OUTPUT
@@ -185,16 +190,12 @@ jobs:
           path: ./install
 
       - name: Changelog
-        id: create_changelog
-        shell: bash
-        run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 @^ || true)
-          if [ -z "$LAST_TAG" ]; then
-            git log --oneline --no-merges --format="%C(auto) %h %s" > changelog.txt
-          else
-            git log --oneline --no-merges --format="%C(auto) %h %s" ${LAST_TAG}..@ > changelog.txt
-          fi
-          cat changelog.txt
+        id: changelog
+        uses: requarks/changelog-action@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          token: ${{ github.token }}
+          tag: ${{ github.ref_name }}
 
       - name: Release
         uses: ncipollo/release-action@v1
@@ -203,11 +204,13 @@ jobs:
           artifacts: ${{ steps.create_artifact.outputs.path }}
           allowUpdates: true
           artifactContentType: application/zip
-          bodyFile: changelog.txt
+          name: ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.changes }}
           draft: false
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           prerelease: false
+          makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
   pages:
