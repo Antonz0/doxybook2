@@ -17,7 +17,7 @@
       
       <guid>https://matusnovak.github.io/doxybook2/hugo-learn/pages/advanced/</guid>
       <description>This page is for advanced users. Make sure you have first read the introduction.
- Updated on 2025-04-18 at 13:40:37 +0000</description>
+ Updated on 2025-04-20 at 21:21:43 +0000</description>
     </item>
     
     <item>
@@ -28,7 +28,7 @@
       <guid>https://matusnovak.github.io/doxybook2/hugo-learn/pages/bug/</guid>
       <description>Class Engine::Audio::AudioBuffer
  Some random bug Some other random bug  Interface Engine::Graphics::Texture
- This has some weird bug too!   Updated on 2025-04-18 at 13:40:37 +0000</description>
+ This has some weird bug too!   Updated on 2025-04-20 at 21:21:43 +0000</description>
     </item>
     
     <item>
@@ -40,7 +40,7 @@
       <description>Member Engine::Audio::AudioBuffer::setCallback (Callback callback)
  Use the AudioBuffer::setCallback2 instead  Member Engine::Audio::AudioBuffer::setData (const TypedAudioData data[], size_t size)
  Use the AudioBuffer::setDataMultiple instead  Member Engine::Audio::Callback )(AudioBuffer &amp;amp;buffer, size_t offset)
- Use the Audio::Callback2 instead   Updated on 2025-04-18 at 13:40:37 +0000</description>
+ Use the Audio::Callback2 instead   Updated on 2025-04-20 at 21:21:43 +0000</description>
     </item>
     
     <item>
@@ -50,7 +50,7 @@
       
       <guid>https://matusnovak.github.io/doxybook2/hugo-learn/pages/intro/</guid>
       <description>This page introduces the user to the topic. Now you can proceed to the advanced section.
- Updated on 2025-04-18 at 13:40:37 +0000</description>
+ Updated on 2025-04-20 at 21:21:43 +0000</description>
     </item>
     
     <item>
@@ -60,7 +60,7 @@
       
       <guid>https://matusnovak.github.io/doxybook2/hugo-learn/pages/test/</guid>
       <description>Class Engine::Audio::AudioBuffer
- Some random test description   Updated on 2025-04-18 at 13:40:37 +0000</description>
+ Some random test description   Updated on 2025-04-20 at 21:21:43 +0000</description>
     </item>
     
     <item>
@@ -70,7 +70,7 @@
       
       <guid>https://matusnovak.github.io/doxybook2/hugo-learn/pages/todo/</guid>
       <description>Class Engine::Audio::AudioBuffer
- Some random todo   Updated on 2025-04-18 at 13:40:37 +0000</description>
+ Some random todo   Updated on 2025-04-20 at 21:21:43 +0000</description>
     </item>
     
   </channel>
