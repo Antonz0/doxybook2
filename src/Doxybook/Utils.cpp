@@ -26,11 +26,14 @@ static std::string replaceAll(std::string str, const std::string& from, const st
 std::string Doxybook2::Utils::normalizeLanguage(const std::string& language) {
     auto res = language;
     std::transform(res.begin(), res.end(), res.begin(), tolower);
+    // Doxygen-supported languages that map 1:1 to the same original lowercase string are omitted.
+    // For a list of supported languages, see `DoxLanguage` XML type in the Doxygen's XML schema `compound.xsd`.
     static std::unordered_map<std::string, std::string> lang_map{
-        {"h", "cpp"},
-        {"c++", "cpp"},
-        {"cs", "csharp"},
+        {"unknown", ""},
         {"c#", "csharp"},
+        {"objective-c", "objc"},
+        {"c++", "cpp"},
+        {"javaScript", "js"},
     };
 
     if (auto it = lang_map.find(res); it != lang_map.end()) {

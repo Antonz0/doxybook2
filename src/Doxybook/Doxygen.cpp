@@ -71,7 +71,7 @@ void Doxybook2::Doxygen::load(const std::string& inputDir) {
         try {
             auto found = cache.find(pair.second);
             if (found == cache.end()) {
-                index->children.push_back(Node::parse(cache, inputDir, pair.second, false));
+                index->children.push_back(Node::parse(config, cache, inputDir, pair.second, false));
                 auto child = index->children.back();
                 if (child->parent == nullptr) {
                     child->parent = index.get();
@@ -90,7 +90,7 @@ void Doxybook2::Doxygen::load(const std::string& inputDir) {
         try {
             auto found = cache.find(pair.second);
             if (found == cache.end()) {
-                index->children.push_back(Node::parse(cache, inputDir, pair.second, true));
+                index->children.push_back(Node::parse(config, cache, inputDir, pair.second, true));
                 auto child = index->children.back();
                 if (child->parent == nullptr) {
                     child->parent = index.get();
@@ -109,7 +109,7 @@ void Doxybook2::Doxygen::load(const std::string& inputDir) {
         try {
             auto found = cache.find(pair.second);
             if (found == cache.end()) {
-                index->children.push_back(Node::parse(cache, inputDir, pair.second, true));
+                index->children.push_back(Node::parse(config, cache, inputDir, pair.second, true));
                 auto child = index->children.back();
                 if (child->parent == nullptr) {
                     child->parent = index.get();
@@ -128,7 +128,7 @@ void Doxybook2::Doxygen::load(const std::string& inputDir) {
         try {
             auto found = cache.find(pair.second);
             if (found == cache.end()) {
-                index->children.push_back(Node::parse(cache, inputDir, pair.second, true));
+                index->children.push_back(Node::parse(config, cache, inputDir, pair.second, true));
                 auto child = index->children.back();
                 if (child->parent == nullptr) {
                     child->parent = index.get();
@@ -150,7 +150,7 @@ void Doxybook2::Doxygen::load(const std::string& inputDir) {
         try {
             auto found = cache.find(pair.second);
             if (found == cache.end()) {
-                index->children.push_back(Node::parse(cache, inputDir, pair.second, true));
+                index->children.push_back(Node::parse(config, cache, inputDir, pair.second, true));
                 auto child = index->children.back();
                 if (child->parent == nullptr) {
                     child->parent = index.get();

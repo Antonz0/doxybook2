@@ -42,18 +42,18 @@ namespace Doxybook2 {
             }
         }
 
-        extern std::string escape(std::string str);
-        extern std::string title(std::string str);
-        extern std::string toLower(std::string str);
-        extern std::string safeAnchorId(std::string str, bool replaceUnderscores);
-        extern std::string namespaceToPackage(std::string str);
-        extern std::string date(const std::string& format);
-        extern std::string stripNamespace(const std::string& format);
-        extern std::string stripAnchor(const std::string& str);
-        extern std::string extractQualifiedNameFromFunctionDefinition(const std::string& str);
-        extern std::vector<std::string> split(const std::string& str, const std::string& delim);
-        extern void createDirectory(const std::string& path);
-        extern std::string normalizeLanguage(const std::string& language);
-        extern std::string replaceNewline(std::string str);
+        std::string escape(std::string str);
+        std::string title(std::string str);
+        std::string toLower(std::string str);
+        std::string safeAnchorId(std::string str, bool replaceUnderscores);
+        std::string namespaceToPackage(std::string str);
+        std::string date(const std::string& format);
+        std::string stripNamespace(const std::string& format);
+        std::string stripAnchor(const std::string& str);
+        std::string extractQualifiedNameFromFunctionDefinition(const std::string& str);
+        std::vector<std::string> split(const std::string& str, const std::string& delim);
+        void createDirectory(const std::string& path);
+        std::string normalizeLanguage(const std::string& language);
+        std::string replaceNewline(std::string str);
     } // namespace Utils
 } // namespace Doxybook2

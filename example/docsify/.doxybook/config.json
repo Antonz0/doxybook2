@@ -3,6 +3,7 @@
   "indexInFolders": true,
   "linkSuffix": ".md",
   "linkLowercase": false,
+  "defaultCodeLanguage": "cpp",
   "indexClassesName": "README",
   "indexFilesName": "README",
   "indexGroupsName": "README",

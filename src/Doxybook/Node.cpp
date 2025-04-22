@@ -27,33 +27,38 @@ static Doxybook2::NodePtr findInCache(Doxybook2::NodeCacheMap& cache, const std:
     }
 }
 
-static Doxybook2::NodePtr findOrCreate(const std::string& inputDir,
+static Doxybook2::NodePtr findOrCreate(const Doxybook2::Config& config,
+    const std::string& inputDir,
     Doxybook2::NodeCacheMap& cache,
     const std::string& refid,
     const bool isGroupOrFile) {
     auto found = findInCache(cache, refid);
     if (found) {
         if (found->isEmpty()) {
-            return Doxybook2::Node::parse(cache, inputDir, found, isGroupOrFile);
+            return Doxybook2::Node::parse(config, cache, inputDir, found, isGroupOrFile);
         } else {
             return found;
         }
     } else {
-        return Doxybook2::Node::parse(cache, inputDir, refid, isGroupOrFile);
+        return Doxybook2::Node::parse(config, cache, inputDir, refid, isGroupOrFile);
     }
 }
 
-Doxybook2::NodePtr Doxybook2::Node::parse(NodeCacheMap& cache,
+Doxybook2::NodePtr Doxybook2::Node::parse(const Config& config,
+    NodeCacheMap& cache,
     const std::string& inputDir,
     const std::string& refid,
     const bool isGroupOrFile) {
     assert(!refid.empty());
     const auto ptr = std::make_shared<Node>(refid);
-    return parse(cache, inputDir, ptr, isGroupOrFile);
+    return parse(config, cache, inputDir, ptr, isGroupOrFile);
 }
 
-Doxybook2::NodePtr
-Doxybook2::Node::parse(NodeCacheMap& cache, const std::string& inputDir, const NodePtr& ptr, const bool isGroupOrFile) {
+Doxybook2::NodePtr Doxybook2::Node::parse(const Config& config,
+    NodeCacheMap& cache,
+    const std::string& inputDir,
+    const NodePtr& ptr,
+    const bool isGroupOrFile) {
     const auto refidPath = Utils::join(inputDir, ptr->refid + ".xml");
     spdlog::info("Loading {}", refidPath);
     Xml xml(refidPath);
@@ -61,9 +66,10 @@ Doxybook2::Node::parse(NodeCacheMap& cache, const std::string& inputDir, const N
     auto root = assertChild(xml, "doxygen");
     auto compounddef = assertChild(root, "compounddef");
 
+    const auto languageAttr = compounddef.getAttr("language", "");
     ptr->xmlPath = refidPath;
     ptr->name = assertChild(compounddef, "compoundname").getText();
-    ptr->language = Utils::normalizeLanguage(compounddef.getAttr("language", ""));
+    ptr->language = languageAttr.empty() ? config.defaultCodeLanguage : Utils::normalizeLanguage(languageAttr);
     auto kind = toEnumKind(compounddef.getAttr("kind"));
     ptr->kind = (ptr->language == "java" && kind == Kind::ENUM) ? Kind::JAVAENUM : kind;
     ptr->empty = false;
@@ -77,7 +83,7 @@ Doxybook2::Node::parse(NodeCacheMap& cache, const std::string& inputDir, const N
             const auto childKindStr = memberdef.getAttr("kind");
             const auto childRefid = memberdef.getAttr("id");
             const auto found = findInCache(cache, childRefid);
-            const auto child = found ? found : Node::parse(memberdef, childRefid);
+            const auto child = found ? found : Node::parse(config, memberdef, childRefid);
             const auto definition = memberdef.firstChildElement("definition");
             if (definition) {
                 const auto defStr = definition.getText();
@@ -117,7 +123,7 @@ Doxybook2::Node::parse(NodeCacheMap& cache, const std::string& inputDir, const N
     auto innerProcess = [&](Xml::Element& parent, const std::string& name) {
         parent.allChildElements(name, [&](Xml::Element& e) {
             const auto childRefid = e.getAttr("refid");
-            auto child = findOrCreate(inputDir, cache, childRefid, isGroupOrFile);
+            auto child = findOrCreate(config, inputDir, cache, childRefid, isGroupOrFile);
             ptr->children.push_back(child);
 
             // Only update child's parent if we are not processing directories
@@ -154,7 +160,7 @@ Doxybook2::Node::parse(NodeCacheMap& cache, const std::string& inputDir, const N
     return ptr;
 }
 
-Doxybook2::NodePtr Doxybook2::Node::parse(Xml::Element& memberdef, const std::string& refid) {
+Doxybook2::NodePtr Doxybook2::Node::parse(const Config& config, Xml::Element& memberdef, const std::string& refid) {
     assert(!refid.empty());
 
     auto ptr = std::make_shared<Node>(refid);

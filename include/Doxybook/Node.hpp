@@ -111,13 +111,20 @@ namespace Doxybook2 {
         typedef std::tuple<Data, ChildrenData> LoadDataResult;
 
         // Parse root xml objects (classes, structs, etc)
-        static NodePtr
-        parse(NodeCacheMap& cache, const std::string& inputDir, const std::string& refid, bool isGroupOrFile);
+        static NodePtr parse(const Config& config,
+            NodeCacheMap& cache,
+            const std::string& inputDir,
+            const std::string& refid,
+            bool isGroupOrFile);
 
-        static NodePtr parse(NodeCacheMap& cache, const std::string& inputDir, const NodePtr& ptr, bool isGroupOrFile);
+        static NodePtr parse(const Config& config,
+            NodeCacheMap& cache,
+            const std::string& inputDir,
+            const NodePtr& ptr,
+            bool isGroupOrFile);
 
         // Parse member xml objects (functions, enums, etc)
-        static NodePtr parse(Xml::Element& memberdef, const std::string& refid);
+        static NodePtr parse(const Config& config, Xml::Element& memberdef, const std::string& refid);
 
         explicit Node(const std::string& refid);
         ~Node();

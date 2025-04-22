@@ -112,6 +112,9 @@ namespace Doxybook2 {
         std::string formulaBlockStart{"\\["};
         std::string formulaBlockEnd{"\\]"};
 
+        // Where to copy images
+        std::string defaultCodeLanguage{""};
+
         // Replace underscores with hyphens in anchors?
         bool replaceUnderscoresInAnchors{true};
     };

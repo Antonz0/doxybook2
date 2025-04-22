@@ -177,7 +177,11 @@ void Doxybook2::TextMarkdownPrinter::print(PrintData& data,
             } else {
                 auto i = node->extra.find_last_of('.');
                 if (i != std::string::npos) {
-                    data.ss << "```" << Utils::normalizeLanguage(node->extra.substr(i + 1));
+                    const auto originalLanguage = node->extra.substr(i + 1);
+
+                    data.ss << "```"
+                            << Utils::normalizeLanguage(
+                                   originalLanguage.empty() ? config.defaultCodeLanguage : originalLanguage);
                     newline();
                     newline();
                 }
