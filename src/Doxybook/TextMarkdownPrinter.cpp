@@ -409,8 +409,7 @@ void Doxybook2::TextMarkdownPrinter::print(PrintData& data,
             if (config.linkAndInlineCodeAsHTML) {
                 data.ss << "</code>";
             } else {
-                // There is a special case when the computer output is inside a link,
-                // see the code that sets the `inComputerOutput` flag above.
+                data.ss << "`";
                 if (data.invertComputerOutput) {
                     data.invertComputerOutput = false;
                 }
